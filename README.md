@@ -1,151 +1,206 @@
-# CQA — Conversation Quality Analytics (engine + API)
+# Vibe CQA — Conversation Quality Analytics
 
-Scores an operator's work in a chat or call against a configurable checklist,
-with per-criterion answer, points, weight, explanation and **turn-level evidence**,
-N/A handling with weight redistribution, a separately flagged gross error,
-section scores, and an appeal → reviewer decision → recalculation flow.
+**Команда VibeTeam · хакатон Freedom Broker (CQA), 7–8 ноября 2026**
 
-The UI is intentionally not here: everything is an HTTP API (CORS open) so an
-HTML page or a Dynamics 365 web resource can sit on top.
+Прототип оценивает работу оператора в чатах и звонках (RU / KZ / EN) по настраиваемому чек-листу. По каждому
+критерию система показывает ответ, баллы, вес, объяснение и реплику-доказательство (клик ведёт к сообщению, у звонка —
+к моменту записи). Итог считается с перераспределением веса при N/A, грубая ошибка отмечается отдельно. Оценку можно
+оспорить: проверяющий подтверждает или меняет ответ с причиной, итог пересчитывается, исходная оценка сохраняется.
 
-## Run
+- **Модель:** Gemma 4 26B-A4B (thinking), свой сервер vLLM. **Стоимость одной оценки: $0** на своём сервере,
+  ≈ **$0.003** по тарифу OpenRouter (замер на всех 65 диалогах DEV, все вызовы включены) — подробнее в разделе «Модель и стоимость».
+- **Модель не считает баллы.** Она выбирает ответ и реплики; арифметику, N/A и округление делает код по правилам чек-листа.
+- **Данные из коробки:** все 65 диалогов DEV уже оценены (прогон №1), интерфейс работает без ключей и без модели.
+
+## Быстрый старт (Docker)
 
 ```bash
-pip install fastapi uvicorn httpx pydantic          # librosa optional (prosody for intonation)
-cp .env.example .env                                  # put DEEPSEEK_API_KEY=...
-python -m cqa.seed                                    # DEV dialogs + already-computed evaluations, no model calls
-uvicorn cqa.api:app --port 8030                       # UI: http://localhost:8030/  · Swagger: /docs
+docker compose up -d --build
 ```
 
-## UI
+Интерфейс: **http://localhost:8030/ui/** · документация API: http://localhost:8030/docs
 
-`web/` holds plain HTML, CSS and JavaScript with no build step, served at `/ui/`. To use it as a
-Dynamics 365 HTML web resource, upload `web/` as is and set `window.CQA_CONFIG = {apiBase: "https://<cqa-service>"}`
-before `js/core.js` loads.
+При первом запуске контейнер создаёт базу с 65 диалогами DEV, официальным чек-листом и готовыми оценками
+(«Прогоны» → №1), без вызовов модели. Данные хранятся в томе Docker и переживают перезапуск;
+`docker compose down -v` возвращает систему в исходное состояние.
 
-| Screen | What it does |
+Роль переключается кнопкой учётной записи в правом верхнем углу (входа нет, как разрешено заданием): **Оператор**,
+**Проверяющий**, **Методолог**, **Админ**. Подача апелляции и её проверка — разные действия разных ролей.
+
+### Чтобы запускать новые оценки
+
+Нужна модель. Варианты:
+
+1. **Ключ OpenRouter (проще всего).** Роль «Админ» → «Модели и ключи» → OpenRouter → вставить ключ → «Добавить модель»
+   → Gemma 4 26B A4B (или любая другая) → сделать моделью по умолчанию. Ключ можно положить и в `.env`
+   (`OPENROUTER_API_KEY`). Там же подключаются DeepSeek, OpenAI и любой OpenAI-совместимый сервер.
+2. **Свой vLLM.** По умолчанию сервис обращается к Gemma по адресу `GEMMA_BASE_URL`
+   (в Docker — `http://host.docker.internal:18887/v1`, это SSH-туннель команды к серверу kt-103).
+
+Импорт наборов по `group_id` требует `ORGANIZER_API` в `.env` (ссылка «Открыть GET для DEV» без `&group_id=…`);
+без него наборы загружаются по полной ссылке или JSON-файлом.
+
+### Без Docker
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env            # всё опционально
+python -m cqa.seed              # DEV-диалоги + готовые оценки, без вызовов модели
+python -m uvicorn cqa.api:app --port 8030
+```
+
+Python 3.10+. Тесты: `python -m unittest discover -s tests -t .`
+
+## Что умеет
+
+| Раздел | Что делает |
 |---|---|
-| Очередь на оценку | import (organizers' API by `group_id`, a URL, or a JSON file); filters; choose dialogs, checklist and model → run the evaluation |
-| Оценки | all evaluations: final and original AI total, gross-error flag, N/A, appeals, status; export `results.json` |
-| Карточка оценки | each criterion's answer, points, weight before and after N/A redistribution, explanation; evidence links (`#/eval/<id>?t=<turn №>`) scroll to the message and seek the call recording; checked range for a missing action; N/A reason; section scores; "Оспорить" button |
-| Апелляции | reviewer queue → disputed answer, the operator's comment, the dialog fragment → confirm or change with a reason; the new total is previewed, then recalculated by the server |
-| Чек-листы | edit criteria, wording, weight, answer type, scale steps and level labels, N/A rule, gross-error flag and the model context; each save is a new version; "Применить к диалогам" re-evaluates |
-| Аналитика качества | score distribution, per-criterion breakdown (full / partial / no / N/A), language and channel splits, lowest-scoring dialogs |
-| Точность ИИ | AI vs reviewer decisions per criterion (scored too high / too low / applicability), plus benchmark results |
+| **Диалоги** | Вкладки «Новые» / «Оценённые». «Загрузить диалоги»: по `group_id`, ссылке или файлу. Выбор звонков (вручную или «Расширенный отбор»: N штук или % за период), выбор модели → запуск оценки в фоне; можно переоценить уже оценённые |
+| **Прогоны** | Очередь и история запусков: модель, системный промпт, версия чек-листа, прогресс, средний итог, грубые ошибки, цена |
+| **Оценки** | Каждая оценка каждого звонка (новая оценка не затирает старую), фильтры: прогон, язык, канал, статус, «Грубые», «Последние»; экспорт `results.json` |
+| **Карточка оценки** | Транскрипт и плеер записи; по каждому критерию ответ, баллы, вес до и после перераспределения N/A, объяснение, ссылки на реплики (`?t=<№>` прокручивает к сообщению и перематывает запись), проверенный участок при пропущенном действии, причина N/A; секции и итог; история оценок звонка; «Оспорить» |
+| **Апелляции** | Все обращения со статусами: на рассмотрении / оценка исправлена / отклонена. Проверяющий видит спорный ответ, комментарий и фрагмент диалога, подтверждает или меняет оценку с причиной; итог пересчитывается сервером |
+| **Чек-листы** | Критерии, формулировки, вес, тип ответа (да/нет или шкала со ступенями), доступность N/A и её условие, грубая ошибка, секции. Каждое сохранение — новая версия. У чек-листа выбирается системный промпт |
+| **Системные промпты** | «Строгий» и «По смыслу»; админ редактирует и версионирует, методолог видит, какой промпт у чек-листа |
+| **Модели и ключи** | Провайдеры (свой сервер, OpenRouter, DeepSeek, OpenAI): ключ проверяется перед сохранением; выбор моделей и модели по умолчанию с ценой |
+| **Аналитика качества** | Распределение итогов, разбор по критериям, языки и каналы, худшие диалоги; выбор прогона |
+| **Точность ИИ** | Решения проверяющих против ответов модели по критериям |
+| **Мои звонки / Моя статистика** | Для оператора: только свои оценённые звонки, апелляции и статистика |
 
-There is no login. A role switcher in the sidebar shows the separate actions: Оператор files appeals,
-Проверяющий decides them and runs evaluations, Методолог also edits checklists. Call recordings play through
-`GET /dialogs/{id}/audio`, which resolves the organizers' player page to its short-lived mp3 link.
+### Сценарий жюри: изменить критерий и применить
 
-Batch, without the server:
+«Чек-листы» → открыть чек-лист → изменить критерий или вес (или добавить новый) → «Сохранить» (новая версия) →
+«Диалоги» → отметить звонки → «Оценить», выбрать чек-лист → результат появится в «Прогонах» и «Оценках».
+Код менять не нужно: промпт строится из текущей версии чек-листа.
+
+## Модель и стоимость
+
+| | |
+|---|---|
+| Модель | **Gemma 4 26B-A4B-it**, thinking, на vLLM (kt-103, несколько экземпляров за nginx) |
+| Вызовы на одну оценку | 3 независимых прохода (голосование: большинство, для шкалы без большинства — медиана) + повторный запрос только по критериям, не прошедшим проверку |
+| Токены на оценку | ≈ 8.8k входных и ≈ 26k выходных (с рассуждениями), все 3 прохода |
+| **Цена одной оценки** | **$0** на своём сервере; **≈ $0.003** по тарифу OpenRouter ($0.0675 / $0.225 за 1M токенов): весь DEV (65) — $0.19 |
+| Время | 65 диалогов ≈ 11 минут при 8 параллельных запросах; параллельность настраивается (`CQA_CALLS_PARALLEL`, `CQA_LLM_PARALLEL`) |
+
+Цена каждого прогона видна на странице «Прогоны». Для платных API действует ограничитель расходов (`CQA_BUDGET_USD`).
+Ответы модели кэшируются: повторный запуск того же диалога с тем же промптом бесплатен.
+
+## Точность
+
+У набора DEV нет эталонных ответов, поэтому качество проверено двумя способами (подробности и все варианты —
+[bench/RESULTS.md](bench/RESULTS.md)).
+
+**1. Собственные эталонные наборы** — 20 диалогов × 8 критериев с эталонной разметкой: `dev` (10 диалогов) и
+`hold-out` (10 более сложных диалогов с ловушками, написанных отдельно, без доступа к промптам: приветствие бота
+вместо оператора, пауза, видная только по меткам времени, неверный срок расчётов T+3, ошибка в 10 раз в арифметике,
+просьба назвать SMS-код и т. п.).
+
+| Модель | dev | hold-out | грубые ошибки найдены |
+|---|---|---|---|
+| **Gemma 4 26B-A4B, thinking** (наша модель) | 98.8% | **100%** | 100% |
+| DeepSeek V4 Flash, thinking (3 прогона) | 99.2% | 99.6% | 100%, 0 ложных |
+| Claude Sonnet 5.5 (OpenRouter), для сравнения | 98.8% | 100% | 100% |
+
+Замер на эталонах сделан со «Строгим» промптом; «По смыслу» на эталонах отдельно не замерялся.
+
+**2. Набор DEV организаторов (65 диалогов).** 8 грубых нарушений проверены вручную (оскорбление, платный «личный»
+совет на RU/KZ/EN, перевод денег на личную карту, раскрытие данных счёта неподтверждённому клиенту на RU/KZ/EN).
+Отправленный прогон находит **все 8 и ни одного лишнего**; 0 оценок с пометкой «нужна проверка».
+
+Метрика — доля ответов по критериям, совпавших с эталоном. Эталоны синтетические и размечены командой, поэтому это
+ориентир, а не гарантия; для промышленного использования стоит разметить часть реальных диалогов.
+
+## Как устроена оценка
+
+- **Транскрипт с номерами реплик.** Модель ссылается на реплики по номерам, а не пересказывает цитаты: ссылки в
+  карточке точные и проверяемые. Реплики бота и системные события — только контекст; приветствие бота не засчитывается
+  оператору.
+- **Ответ по критерию:** рассуждение → ответ (да / нет / ступень шкалы / N/A) → реплики-доказательства → проверенный
+  участок, если действие пропущено → объяснение на русском или причина N/A.
+- **Проверка кодом** (`cqa/validate.py`): допустимый тип ответа, N/A только где разрешено, существующие номера реплик,
+  положительный ответ не может опираться только на реплики бота или клиента, отрицательный — без доказательства или
+  проверенного участка. Не прошедшие критерии уходят на один повторный запрос; если и он не помог — «нужна проверка».
+- **Подсчёт** (`cqa/scoring.py`): шкала → доля веса, N/A исключается с пропорциональным перераспределением веса, грубая
+  ошибка — отдельный флаг (итог не обнуляет), секции, округление из чек-листа (half-up, 2 знака).
+- **Системные промпты** не зависят от конкретного чек-листа (следующий чек-лист будет другим):
+  - **«Строгий»** читает определения буквально;
+  - **«По смыслу»** (выбран для официального чек-листа) толкует критерий по назначению, как опытный супервайзер, и не
+    требует дословных формулировок; грубые ошибки проверяются по существу, без поблажек.
+- **Звонки:** ошибки распознавания речи, особенности устной речи и неполная запись не считаются ошибкой оператора.
+- **Воспроизводимость:** каждая оценка хранит модель, промпт и его версию, версию чек-листа; повторная оценка создаёт
+  новую запись («Оценка №2»), старая и её апелляции остаются.
+
+## Сдача результатов
+
+`results/dev/results.json` — 65 диалогов DEV в формате JSON 1.0 (`team_name: VibeTeam`,
+`model: {"mode": "local", "name": "gemma-4-26B-A4B-it"}`). Перед записью файл проверяется: одна запись на диалог,
+нет повторов, все 8 критериев ровно по одному разу, допустимые значения; ошибка оценки — `status: "error"`.
+
+**Контрольный набор:**
+
+1. «Диалоги» → «Загрузить диалоги» → `group_id`, выданный организаторами (или ссылка).
+2. Вкладка «Новые» → выбрать все → «Оценить» (чек-лист — официальный). Ход виден в «Прогонах».
+3. «Оценки» → чек-лист официальный → «Экспорт results.json» → сохранить как `results/prod/results.json`.
+4. Проверить, что записей ровно 10 → commit и push.
+
+То же без интерфейса:
 
 ```bash
-python -m cqa.cli --source bench/dialogs.json --out runs/out.json
-python -m cqa.cli --source "<organizers GET url with group_id>"
+python -m cqa.cli --source "<ссылка организаторов>&group_id=<id>" --export results/prod/results.json
 ```
 
-## API
+## Настройки (`.env`)
 
-| Method | Path | Purpose |
+| Переменная | Назначение |
+|---|---|
+| `ORGANIZER_API` | GET-ссылка API организаторов без `&group_id=…` |
+| `GEMMA_BASE_URL` | адрес vLLM с Gemma (по умолчанию `http://127.0.0.1:18887/v1`) |
+| `CQA_PROVIDER` | модель по умолчанию для скриптов, например `openrouter:<vendor/model>`, `deepseek:deepseek-flash` |
+| `OPENROUTER_API_KEY`, `DEEPSEEK_API_KEY`, `OPENAI_API_KEY` | ключи провайдеров (или в интерфейсе) |
+| `CQA_CALLS_PARALLEL` / `CQA_LLM_PARALLEL` | звонков одновременно (12) / запросов к модели одновременно (32) |
+| `CQA_SAMPLES` | проходов на оценку для голосования (3) |
+| `CQA_BUDGET_USD` | лимит расходов на платные API за запуск сервиса |
+| `CQA_DB` | путь к SQLite (по умолчанию `data/cqa.sqlite`) |
+
+## Архитектура
+
+- **Сервер:** Python, FastAPI, SQLite (один файл: диалоги, чек-листы с версиями, оценки и их история, апелляции,
+  прогоны, промпты, настройки моделей). Фоновая очередь прогонов. Данные организаторов загружаются через сервер, поэтому
+  CORS не мешает.
+- **Интерфейс:** HTML, CSS и JavaScript без сборки (`web/`), отдаётся сервером по `/ui/`. Чтобы встроить его как
+  HTML-ресурс Dynamics 365, загрузите `web/` как есть и задайте `window.CQA_CONFIG = {apiBase: "https://<cqa-service>"}`
+  до загрузки `js/core.js`.
+- **Модели:** любой OpenAI-совместимый API; ответы — строгий JSON по схеме.
+
+```
+cqa/        сервер: api.py (HTTP API), evaluate.py (оценка), prompts.py / prompt_presets.py (промпты),
+            validate.py, scoring.py, export.py (results.json), catalog.py (модели и ключи), store.py (SQLite), cli.py
+web/        интерфейс
+checklists/ official.json — официальный чек-лист (формулировки организаторов)
+data/       dev/dev_raw.json — набор DEV; seed/dev_evaluations.json — готовые оценки для первого запуска
+results/    dev/results.json (и prod/results.json после контрольного набора)
+bench/      эталонные наборы, скрипт замера точности, RESULTS.md
+tests/      юнит-тесты подсчёта, проверки и данных
+```
+
+### Основные методы API
+
+| Метод | Путь | Назначение |
 |---|---|---|
-| GET | `/checklists`, `/checklists/{id}?version=` | checklist (latest or a version) |
-| PUT | `/checklists/{id}` | save a **new version** (criteria, weights, type binary/scale, scale range, N/A rule, critical, requires_audio) |
-| POST | `/dialogs/import` | `{"source": url-or-path}` or `{"group_id": "DEV"}` (with `ORGANIZER_API`) |
-| GET | `/dialogs` | list with total / gross error / appealed |
-| POST | `/evaluate` | `{"conversation_ids": [...], "checklist_id": "default", "provider"?: "...", "strategy"?: "..."}` |
-| GET | `/evaluations/{cid}?version=` | original + final result, decisions, dialog, appeals, available versions |
-| POST | `/appeals` | `{"conversation_id", "criterion_id", "comment"}` → stores disputed answer + dialog fragment |
-| GET | `/appeals?status=pending` | reviewer queue |
-| POST | `/appeals/{id}/decision` | `{"action": "confirm"\|"change", "new_answer"?, "reason"}` → recalculates total |
+| GET / PUT | `/checklists`, `/checklists/{id}` | чек-листы; PUT сохраняет новую версию |
+| POST | `/dialogs/import` | `{"group_id": "DEV"}` или `{"source": "<url или путь>"}` |
+| POST | `/evaluate` | `{"conversation_ids": [...], "checklist_id": "official", "model_id"?: "..."}` → прогон в очереди |
+| GET | `/runs`, `/runs/{id}` | прогоны и их итоги |
+| GET | `/evaluations?checklist_id=`, `/evaluations/{id}` | оценки; `?eval_id=<звонок>#<n>` — конкретная оценка |
+| POST | `/appeals`, `/appeals/{id}/decision` | апелляция; решение `confirm` / `change` с причиной → пересчёт |
+| GET | `/export?checklist_id=official` | `results.json` в формате организаторов + проверка |
 
-Re-applying a changed checklist creates a new evaluation version; earlier
-versions keep their appeals and decisions (`?version=1`).
+## Ограничения
 
-## Hackathon submission (official checklist)
-
-```bash
-python -m cqa.cli --source "<organizers GET url>&group_id=DEV" --export results/dev/results.json --team "<team>"
-python -m cqa.cli --source "<prod url>" --export results/prod/results.json --team "<team>"
-```
-
-`checklists/official.json` is the official 8-criterion checklist (`contact … critical`), written with
-the organizers' wording only. `--export` writes "Формат JSON 1.0": evidence turns are 1-based, N/A is `null`,
-`critical_flag` comes from the critical criterion, and a failed dialog becomes `status: "error"`. Before
-writing, the file is checked against the guide's rules (ids, 8 criteria, value types, scale steps).
-Default: 3-sample vote (majority, or the median for a scale with no majority), about $0.003 per dialog.
-
-**New checklist:** write it as JSON in the same shape. Use `type` binary/scale, `scale.steps`, `na_rule`,
-`critical` + `flag_on` (which answer means a violation), and `weight`. No code changes are needed. The prompt
-rules are deliberately checklist-independent; see bench/RESULTS.md, "DEV".
-
-## Plugging a different model
-
-Provider spec (API `provider`, CLI/bench `--provider`, env `CQA_PROVIDER`):
-
-| spec | endpoint |
-|---|---|
-| `compat:/models/gemma-4-26B-A4B-it@<url>` (**default**, `GEMMA_BASE_URL`, default `http://127.0.0.1:18887/v1` — SSH tunnel to kt-103) | Gemma 4 26B-A4B, thinking, self-hosted vLLM |
-| `deepseek:deepseek-flash` / `deepseek:deepseek-v4-pro` | DeepSeek, `DEEPSEEK_API_KEY` |
-| `openai:<model>` | OpenAI, `OPENAI_API_KEY` |
-| `openrouter:<vendor/model>` (e.g. `openrouter:anthropic/claude-sonnet-5.5`) | OpenRouter, `OPENROUTER_API_KEY`; `--thinking` maps to `reasoning.effort`, cost read from the response |
-| `compat:<model>@<base_url>` | any OpenAI-compatible server (vLLM, Ollama, OpenRouter…), `LLM_API_KEY` |
-| `agent:<dir>` | no API: prompts are written to `<dir>/requests/`, answers read from `<dir>/responses/` — lets an external agent (Claude, a human) act as the model |
-
-All calls go through a response cache (`runs/cache`) and a hard USD budget.
-
-## How it scores
-
-- **The model never computes points.** It returns per criterion: `reasoning` →
-  `answer` (`yes`/`no`, integer on the scale, or `na`) → `evidence` (turn ids) →
-  `checked_range` (when an action is missing) → `explanation` / `na_reason`.
-- **Deterministic validation** (`cqa/validate.py`) rejects: wrong answer type, N/A
-  where not allowed, non-existent turn ids, a positive answer supported only by
-  BOT/CLIENT turns (bot greeting credited to the operator), a negative answer with
-  no evidence or checked range. Failing criteria get **one targeted repair call**;
-  still failing → `needs_review`.
-- **Scoring** (`cqa/scoring.py`): scale → (v−min)/(max−min) × weight; N/A drops out
-  of the denominator (weight redistributed proportionally — hackathon rule;
-  `na_policy: full_credit` gives the qbox/QMT behaviour); gross error flagged
-  separately (`gross_error_policy: zero_total` to zero the total); section
-  scores; rounding mode and decimals from the checklist.
-- **Audio criteria** (`requires_audio: true`, e.g. intonation): N/A by rule on
-  chats; on calls, prosody per operator turn (pitch range/variability, loudness,
-  tempo; segments cut by transcript timestamps so the client is never measured)
-  is measured with librosa and given to the model as numbers. If the recording or
-  librosa is unavailable the criterion is N/A with a reason — the model is never
-  asked to guess tone from text.
-
-## Strategies (benchmarked — see [bench/RESULTS.md](bench/RESULTS.md))
-
-- `grounded` + thinking `high` — **default** strategy (default model: Gemma 4 26B-A4B; DeepSeek flash was the earlier default): one call, turn-id evidence,
-  validation + targeted repair. Hold-out: 99.6% answer accuracy, 100% gross-error recall,
-  1.35-point mean total error over 3 runs.
-- `single` — one call, quotes instead of ids, no validation (baseline)
-- `per_criterion` — one call per criterion on a cached shared prefix
-- `hybrid` — routine criteria in one fast call, `deep_check` criteria in their own reasoning call
-- `--samples k` — self-consistency vote
-- `--thinking off|low|high` — DeepSeek reasoning level (off is cheaper but misses gross errors)
-
-## Benchmark
-
-```bash
-python -m bench.run_bench --provider deepseek:deepseek-flash --strategy grounded
-python -m bench.run_bench --provider deepseek:deepseek-flash --strategy grounded \
-       --dialogs bench/holdout_dialogs.json --gold bench/holdout_gold.json
-```
-
-Gold sets: `bench/dialogs.json` + `gold.json` (dev, 10 dialogs) and
-`bench/holdout_*.json` (10 harder dialogs written independently, blind to the prompts).
-
-## Cost
-
-Model: **DeepSeek V4.1 Flash** (`deepseek-flash`), thinking high, `grounded`:
-about **$0.0005–0.0009 per evaluation** including reasoning tokens and the occasional
-repair call (≈ 3–4k input, 1–3k output tokens), ≈ 12 s. The whole 65-dialog DEV set
-costs about $0.05.
-
-## Tests
-
-```bash
-python -m unittest tests.test_core -v      # scoring, validation, data — no model needed
-```
+- **Факты домена** (тарифы, сроки расчётов, налоги) модель берёт из своих знаний; для промышленного использования их
+  стоит добавить в контекст чек-листа.
+- **Интонация и дикция** требуют записи и `librosa` (не устанавливается по умолчанию); без них такой критерий получает
+  N/A по правилу, а не угадывается по тексту.
+- **Эталонные наборы синтетические** (20 диалогов); замер переносится на реальные данные без изменений
+  (`python -m bench.run_bench`).

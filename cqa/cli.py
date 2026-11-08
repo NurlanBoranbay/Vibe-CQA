@@ -17,6 +17,7 @@ from .evaluate import evaluate
 import os
 
 from .llm import Budget, default_provider, load_env, make_provider
+from .prompt_presets import PRESETS
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -40,6 +41,8 @@ async def main() -> None:
     load_env(ROOT / ".env")
     a.provider = a.provider or os.environ.get("CQA_PROVIDER") or default_provider()
     cl = load_checklist(a.checklist)
+    # the checklist names its system prompt (built-in presets; the UI may hold newer admin versions)
+    sp = next((p for p in PRESETS if p["id"] == cl.prompt_id), PRESETS[0])
     dialogs = select(load_dialogs(a.source), a.ids)
     budget = Budget(a.budget)
     provider = make_provider(a.provider, budget=budget, thinking=a.thinking, cache_dir=ROOT / "runs" / "cache")
@@ -48,7 +51,8 @@ async def main() -> None:
     async def one(d):
         async with sem:
             try:
-                ev = await evaluate(provider, cl, d, strategy=a.strategy, samples=a.samples)
+                ev = await evaluate(provider, cl, d, strategy=a.strategy, samples=a.samples,
+                                    rules=sp["text"], prompt_label=f"{sp['id']} v1")
             except Exception as e:  # recorded as status=error, never as a zero score
                 print(f"{d.conversation_id:24s} ERROR {e!r}")
                 return d.conversation_id, repr(e)
