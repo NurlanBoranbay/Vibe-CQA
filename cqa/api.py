@@ -347,20 +347,27 @@ def _runs_by_dialog(checklist_id: str) -> dict[str, int]:
 
 @app.get("/dialogs")
 def list_dialogs(dataset: Optional[str] = None, checklist_id: str = "official"):
+    """checklist_id="*" = all checklists: a call counts as evaluated by any of them, and its newest
+    evaluation (with the checklist that made it) is shown."""
+    ids = [c["id"] for c in store.checklists()] if checklist_id == "*" else [checklist_id]
+    titles = {c["id"]: c.get("title") or c["id"] for c in store.checklists()}
+    runs_of = {c: _runs_by_dialog(c) for c in ids}
     out = []
-    run_of = _runs_by_dialog(checklist_id)
     for d in store.dialogs(dataset):
-        ev = store.evaluation(d["conversation_id"], checklist_id)
-        out.append({"conversation_id": d["conversation_id"], "channel": d["channel"],
+        cid = d["conversation_id"]
+        found = [(store.evaluation_time(cid, c) or 0, c, e) for c in ids if (e := store.evaluation(cid, c))]
+        _, cl_id, ev = max(found, key=lambda x: x[0]) if found else (0, None, None)
+        out.append({"conversation_id": cid, "channel": d["channel"],
                     "language": d["language"], "dataset": d["dataset"], "turns": len(d["turns"]),
                     "has_audio": bool(d.get("audio_url")),
                     "total": ev["final"]["score"]["total"] if ev else None,
                     "gross_error": ev["final"]["score"]["gross_error"] if ev else None,
                     "imported_at": d.get("imported_at"),
                     "operator": (op := _operator_of(d))[0], "operator_source": op[1], "call_at": _call_time(d),
-                    "run_id": (ev.get("run_id") or run_of.get(d["conversation_id"])) if ev else None,
-                    "evaluated_at": store.evaluation_time(d["conversation_id"], checklist_id) if ev else None,
-                    "appealed": bool(aps := [a for a in store.appeals(cid=d["conversation_id"]) if _appeal_of(a, ev)]),
+                    "checklist_id": cl_id, "checklist_title": titles.get(cl_id) if cl_id else None,
+                    "run_id": (ev.get("run_id") or runs_of[cl_id].get(cid)) if ev else None,
+                    "evaluated_at": store.evaluation_time(cid, cl_id) if ev else None,
+                    "appealed": bool(aps := [a for a in store.appeals(cid=cid) if ev and _appeal_of(a, ev)]),
                     # pending while any appeal awaits a decision; decided once all are resolved
                     "appeal_state": (None if not aps else
                                      "pending" if any(a["status"] == "pending" for a in aps) else "decided")})
@@ -489,10 +496,11 @@ async def _execute(rid: int) -> None:
                                     samples=SAMPLES, rules=sp["text"], prompt_label=f"{sp['id']} v{sp['version']}")
             async with lock:                    # number the evaluations of a call in order
                 no = store.next_eval_no(cid, cl.id)
-                store.save_history({"eval_id": f"{cid}#{no}", "conversation_id": cid, "checklist_id": cl.id,
+                eid = store.next_eval_id(cid)   # unique per call across checklists; «Оценка №no» is per checklist
+                store.save_history({"eval_id": eid, "conversation_id": cid, "checklist_id": cl.id,
                                     "checklist_version": cl.version, "run_id": rid, "eval_no": no, "pending": True})
             doc = {"conversation_id": cid, "checklist_id": cl.id, "checklist_version": cl.version, "run_id": rid,
-                   "eval_id": f"{cid}#{no}", "eval_no": no, "created_at": time.time(),
+                   "eval_id": eid, "eval_no": no, "created_at": time.time(),
                    "original": ev.model_dump(), "final": {"results": [r.model_dump() for r in ev.results],
                                                            "score": ev.score}, "decisions": []}
             store.save_evaluation(cid, cl.id, doc)
@@ -698,7 +706,14 @@ def get_run(rid: int):
 @app.get("/evaluations")
 def list_evaluations(checklist_id: str = "official", all: bool = False):
     """Compact rows: the latest evaluation of each call, or with ?all=1 every evaluation ever made
-    (one row per evaluation instance, newest first)."""
+    (one row per evaluation instance, newest first). checklist_id="*" = every checklist; each row
+    names the checklist it was made with."""
+    titles = {c["id"]: c.get("title") or c["id"] for c in store.checklists()}
+    ids = list(titles) if checklist_id == "*" else [checklist_id]
+    return [{**r, "checklist_id": c, "checklist_title": titles.get(c, c)} for c in ids for r in _evaluation_rows(c, all)]
+
+
+def _evaluation_rows(checklist_id: str, all: bool) -> list[dict]:
     appeals = store.appeals()
     run_of = _runs_by_dialog(checklist_id)
     latest = {e["conversation_id"]: e.get("eval_id") for e in store.evaluations_latest(checklist_id)}

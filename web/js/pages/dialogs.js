@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   const { html, raw, icon, api, fmt, toStr } = CQA;
-  const S = (CQA.state.dialogs = { mode: 'new', runs: {}, rows: [], sel: new Set(), q: '', lang: '', channel: '', status: '', checklist: 'official', checklists: [], sort: 'time', dir: -1 });
+  const S = (CQA.state.dialogs = { mode: 'new', runs: {}, rows: [], sel: new Set(), q: '', lang: '', channel: '', status: '', checklist: '*', checklists: [], sort: 'time', dir: -1 });
   const isNew = () => S.mode === 'new';
 
   function statusOf(r) {
@@ -39,7 +39,7 @@
   const runCell = (id) => {
     const run = id && S.runs[id];
     if (!id) return html`<span class="muted">—</span>`;
-    return html`<a class="run-cell" href="#/runs/${id}"><b>Прогон №${id}</b>${run ? html`<span>${CQA.modelName(run.model)} · ${CQA.promptTitles[run.prompt_id] || run.prompt_id}</span>` : ''}</a>`;
+    return html`<a class="run-cell" href="#/runs/${id}"><b>Прогон №${id}</b>${run ? html`<span>${S.checklist === '*' ? `${run.checklist_title || run.checklist_id} · ` : ''}${CQA.modelName(run.model)} · ${CQA.promptTitles[run.prompt_id] || run.prompt_id}</span>` : ''}</a>`;
   };
 
   function table() {
@@ -207,7 +207,7 @@
     const toggle = () => { if (canPick() && !inProgress(r)) { S.sel.has(r.conversation_id) ? S.sel.delete(r.conversation_id) : S.sel.add(r.conversation_id); paint(); } };
     // checkbox, № and Объект are a selection zone: a missed checkbox must never throw away the selection
     if (e.target.closest && e.target.closest('.sel-zone')) return toggle();
-    if (r.total != null) return CQA.go(`#/eval/${encodeURIComponent(r.conversation_id)}?cl=${S.checklist}`);
+    if (r.total != null) return CQA.go(`#/eval/${encodeURIComponent(r.conversation_id)}?cl=${encodeURIComponent(r.checklist_id || S.checklist)}`);
     toggle();
   };
   document.addEventListener('keydown', (e) => {
@@ -224,7 +224,7 @@
       if (S.mode !== mode) { S.mode = mode; S.status = ''; S.sel.clear(); }
       if (r.query.cl) S.checklist = r.query.cl;
       const [rows, cls, runs] = await Promise.all([api(`/dialogs?checklist_id=${encodeURIComponent(S.checklist)}`), api('/checklists'),
-        api(`/runs?checklist_id=${encodeURIComponent(S.checklist)}`).catch(() => [])]);
+        api(S.checklist === '*' ? '/runs' : `/runs?checklist_id=${encodeURIComponent(S.checklist)}`).catch(() => [])]);
       S.runs = Object.fromEntries(runs.map((x) => [x.id, x]));
       S.rows = rows;
       S.checklists = cls;
@@ -253,7 +253,7 @@
           </div>`}
         <div class="card tight">
           <div class="toolbar" style="padding:14px 16px;border-bottom:1px solid var(--border)">
-            <span class="tb-group"><span class="toolbar-lbl">Чек-лист</span>${CQA.dd({ value: S.checklist, onChange: 'dlg-cl', label: 'Чек-лист', cls: 'fixed', options: cls.map((c) => ({ value: c.id, label: c.title || c.id })) })}</span><span class="tb-sep"></span>
+            <span class="tb-group"><span class="toolbar-lbl">Чек-лист</span>${CQA.dd({ value: S.checklist, onChange: 'dlg-cl', label: 'Чек-лист', cls: 'fixed', options: [{ value: '*', label: 'Все чек-листы' }, ...cls.map((c) => ({ value: c.id, label: c.title || c.id }))] })}</span><span class="tb-sep"></span>
             <label class="search"><span class="sr">Поиск по ID</span>${icon('search', 16)}<input class="input" type="search" placeholder="Поиск по ID диалога" value="${S.q}" data-on-input="dlg-q"></label>
             ${CQA.dd({ value: S.lang, onChange: 'dlg-f', data: { k: 'lang' }, label: 'Язык', options: [{ value: '', label: 'Все языки' }, ...langs] })}
             ${CQA.dd({ value: S.channel, onChange: 'dlg-f', data: { k: 'channel' }, label: 'Канал', options: [{ value: '', label: 'Все каналы' }, 'Чат', 'Звонок'] })}
@@ -268,7 +268,7 @@
 
   CQA.actions['dlg-q'] = (el) => { S.q = el.value; paint(); };
   CQA.actions['dlg-f'] = (el) => { S[el.dataset.k] = el.value; paint(); };
-  CQA.actions['dlg-cl'] = (el) => { S.checklist = el.value; CQA.render(); };
+  CQA.actions['dlg-cl'] = (el) => { S.checklist = el.value; CQA.go(`#/new?tab=${S.mode}&cl=${encodeURIComponent(el.value)}`); };
   CQA.actions['dlg-one'] = (el) => { el.checked ? S.sel.add(el.dataset.id) : S.sel.delete(el.dataset.id); paint(); };
   CQA.actions['dlg-all'] = (el) => { filtered().filter((r) => !inProgress(r)).forEach((r) => (el.checked ? S.sel.add(r.conversation_id) : S.sel.delete(r.conversation_id))); paint(); };
   CQA.actions['dlg-clear'] = () => { S.sel.clear(); paint(); };
@@ -306,7 +306,7 @@
     if (!CQA.can('evaluate')) return CQA.toast(`Запуск оценки доступен ролям: ${CQA.whoCan('evaluate')}`, 'err');
     const ids = [...S.sel];
     const again = S.rows.filter((r) => S.sel.has(r.conversation_id) && r.total != null).length;
-    openEvaluate(ids, S.checklist, again);
+    openEvaluate(ids, S.checklist === '*' ? 'official' : S.checklist, again);
   };
 
   /** shared with the checklist page ("apply to dialogs") */

@@ -739,3 +739,6 @@ tr.click:hover td:not(.sel-zone):not(.no-open) { background: var(--surface-2); }
 .ftog svg { flex: none; }
 table.table.fixed-cols { table-layout: fixed; }
 table.table.fixed-cols td { overflow-wrap: anywhere; }
+
+/* one-line text with ellipsis */
+.ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

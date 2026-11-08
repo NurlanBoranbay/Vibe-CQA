@@ -135,6 +135,12 @@ class Store:
         rows = self._q("SELECT COUNT(*) n FROM eval_history WHERE cid=? AND checklist_id=?", (cid, checklist_id))
         return int(rows[0]["n"]) + 1
 
+    def next_eval_id(self, cid: str) -> str:
+        """A new history id for a call, unique across ALL checklists (eval_no stays per checklist for display)."""
+        nums = [int(r["eval_id"].rsplit("#", 1)[1]) for r in self._q("SELECT eval_id FROM eval_history WHERE cid=?", (cid,))
+                if r["eval_id"].rsplit("#", 1)[-1].isdigit()]
+        return f"{cid}#{max(nums, default=0) + 1}"
+
     def set_appeal_body(self, aid: int, body: dict) -> None:
         self._q("UPDATE appeals SET body=? WHERE id=?", (json.dumps(body, ensure_ascii=False), aid))
 

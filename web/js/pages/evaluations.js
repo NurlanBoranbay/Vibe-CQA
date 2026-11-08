@@ -4,12 +4,12 @@
 (function () {
   'use strict';
   const { html, raw, icon, api, fmt, toStr } = CQA;
-  const S = (CQA.state.evals = { rows: [], cl: null, checklist: 'official', q: '', lang: '', channel: '', status: '', gross: false, latestOnly: false, run: '', sort: 'at', dir: -1 });
+  const S = (CQA.state.evals = { rows: [], cl: null, cls: {}, checklist: '*', q: '', lang: '', channel: '', status: '', gross: false, latestOnly: false, run: '', sort: 'at', dir: -1 });
   const perCall = () => CQA.isOperator();          // operator sees calls; everyone else sees evaluation instances
   /** live state of a call applies only to its latest evaluation row */
   const live = (r) => (r.is_latest !== false ? CQA.state.runs.pending[r.conversation_id] : undefined);
   const evName = (r) => (r.run_id ? `Прогон №${r.run_id}` : `Оценка №${r.eval_no || 1}`);
-  const href = (r) => `#/eval/${encodeURIComponent(r.conversation_id)}?cl=${S.checklist}${r.is_latest === false && r.eval_id ? `&e=${encodeURIComponent(r.eval_id)}` : ''}`;
+  const href = (r) => `#/eval/${encodeURIComponent(r.conversation_id)}?cl=${encodeURIComponent(r.checklist_id || S.checklist)}${r.is_latest === false && r.eval_id ? `&e=${encodeURIComponent(r.eval_id)}` : ''}`;
 
   function status(r) {
     const run = live(r);
@@ -50,11 +50,12 @@
           <td class="muted no-open">${i + 1}</td>
           ${perCall() ? '' : html`<td class="nowrap"><b style="font-weight:600">${evName(r)}</b>
             <div>${r.is_latest ? html`<span class="pill ok" style="height:18px">последняя</span>` : html`<span class="muted small">прежняя оценка</span>`}</div></td>`}
-          <td>${CQA.objCell(r)}</td>
+          <td>${CQA.objCell(r)}${S.checklist === '*' ? html`<div class="muted small ell" title="${r.checklist_title}">${r.checklist_title}</div>` : ''}</td>
           <td class="num">${CQA.scoreHtml(r.total)}</td>
           <td>${r.gross_error ? html`<span class="pill danger">${icon('flag', 12)}выявлены</span>` : html`<span class="muted small">нет</span>`}</td>
           ${op ? '' : html`<td>${(r.appeals.items || []).length ? html`<div class="row" style="gap:4px">${r.appeals.items.map((a) => {
-            const c = S.cl && S.cl.criteria.find((x) => x.id === a.criterion_id);
+            const rc = S.cls[r.checklist_id] || S.cl;
+            const c = rc && rc.criteria.find((x) => x.id === a.criterion_id);
             const t = CQA.appealTag(a, c);
             const lbl = (v) => (c ? CQA.answerView(c, v).label : String(v));
             // AI verdict → verdict after the appeal; grey once decided, amber while waiting
@@ -77,14 +78,20 @@
     crumbs: () => [{ label: 'Оценки' }],
     async render(r) {
       if (r.query.cl) S.checklist = r.query.cl;
-      const [list, cl, cls] = await Promise.all([api(`/evaluations?checklist_id=${encodeURIComponent(S.checklist)}${perCall() ? '' : '&all=1'}`), CQA.checklist(S.checklist), api('/checklists')]);
-      S.rows = list; S.cl = cl;
-      // runs that produced evaluations in this list, newest first (+ «без прогона» for imported/older evaluations)
-      const runIds = [...new Set(list.map((x) => x.run_id).filter(Boolean))].sort((a, b) => b - a);
-      if (S.run && S.run !== 'none' && !runIds.some((id) => String(id) === S.run)) S.run = '';
-      const runTimes = {};
-      list.forEach((x) => { if (x.run_id) runTimes[x.run_id] = Math.max(runTimes[x.run_id] || 0, x.updated_at || 0); });
-      const runOpts = [{ value: '', label: 'Все прогоны' }, ...runIds.map((id) => ({ value: String(id), label: `Прогон №${id}` })),
+      const all = S.checklist === '*';
+      const [list, cls, allRuns] = await Promise.all([api(`/evaluations?checklist_id=${encodeURIComponent(S.checklist)}${perCall() ? '' : '&all=1'}`), api('/checklists'),
+        perCall() ? [] : api('/runs').catch(() => [])]);
+      // criteria of every checklist in the list (appeal tags name the criterion)
+      const used = all ? [...new Set(list.map((x) => x.checklist_id))] : [S.checklist];
+      const defs = await Promise.all(used.map((id) => CQA.checklist(id).catch(() => null)));
+      S.cls = Object.fromEntries(used.map((id, i) => [id, defs[i]]));
+      S.rows = list; S.cl = all ? null : S.cls[S.checklist];
+      // every finished run, newest first; a run of another checklist is labelled with it and switches the table to it
+      const runs = allRuns.filter((x) => x.n_done).sort((a, b) => b.id - a.id);
+      S.runChecklist = Object.fromEntries(runs.map((x) => [String(x.id), x.checklist_id]));
+      if (S.run && S.run !== 'none' && !all && S.runChecklist[S.run] !== S.checklist) S.run = '';
+      const runOpts = [{ value: '', label: 'Все прогоны' },
+        ...runs.map((x) => ({ value: String(x.id), label: x.checklist_id === S.checklist ? `Прогон №${x.id}` : `Прогон №${x.id} · ${x.checklist_title || x.checklist_id}` })),
         ...(list.some((x) => !x.run_id) ? [{ value: 'none', label: 'Без прогона' }] : [])];
       const langs = [...new Set(list.map((x) => x.language))].sort();
       const totals = list.map((x) => x.total).filter((x) => x != null);
@@ -101,7 +108,7 @@
         </div>
         <div class="card tight">
           <div class="ev-filters">
-            ${CQA.dd({ value: S.checklist, onChange: 'ev-cl', label: 'Чек-лист', cls: 'fixed w-cl', options: cls.map((c) => ({ value: c.id, label: c.title || c.id })) })}
+            ${CQA.dd({ value: S.checklist, onChange: 'ev-cl', label: 'Чек-лист', cls: 'fixed w-cl', options: [{ value: '*', label: 'Все чек-листы' }, ...cls.map((c) => ({ value: c.id, label: c.title || c.id }))] })}
             ${perCall() ? '' : CQA.dd({ value: S.run, onChange: 'ev-f', data: { k: 'run' }, label: 'Прогон', cls: 'fixed w-run', options: runOpts })}
             <label class="search"><span class="sr">Поиск</span>${icon('search', 16)}<input class="input" type="search" placeholder="ID звонка" value="${S.q}" data-on-input="ev-q"></label>
             ${CQA.dd({ value: S.lang, onChange: 'ev-f', data: { k: 'lang' }, label: 'Язык', cls: 'fixed w-sm', options: [{ value: '', label: 'Все языки' }, ...langs] })}
@@ -116,12 +123,17 @@
   });
 
   CQA.actions['ev-q'] = (el) => { S.q = el.value; paint(); };
-  CQA.actions['ev-f'] = (el) => { S[el.dataset.k] = el.value; paint(); };
+  CQA.actions['ev-f'] = (el) => {
+    S[el.dataset.k] = el.value;
+    const other = el.dataset.k === 'run' && S.runChecklist && S.runChecklist[el.value];
+    if (other && S.checklist !== '*' && other !== S.checklist) { S.checklist = other; CQA.go(`#/evaluations?cl=${encodeURIComponent(other)}`); return; }   // run of another checklist
+    paint();
+  };
   CQA.actions['ev-gross'] = (el) => { S.gross = el.checked; paint(); };
   CQA.actions['ev-latest'] = (el) => { S.latestOnly = el.checked; paint(); };
   CQA.actions['ev-tog'] = (el) => { const k = el.dataset.k; S[k] = !S[k]; el.setAttribute('aria-pressed', String(S[k])); paint(); };
   CQA.actions['ev-reset'] = () => { Object.assign(S, { q: '', lang: '', channel: '', status: '', gross: false, latestOnly: false, run: '' }); CQA.render(); };
-  CQA.actions['ev-cl'] = (el) => { S.checklist = el.value; CQA.render(); };
+  CQA.actions['ev-cl'] = (el) => { S.checklist = el.value; CQA.go(`#/evaluations?cl=${encodeURIComponent(el.value)}`); };
   CQA.actions['ev-sort'] = (el, e) => { e.stopPropagation(); const k = el.dataset.k; S.dir = S.sort === k ? -S.dir : 1; S.sort = k; paint(); };
   CQA.actions['ev-open'] = (el, e) => { if (e.target.closest('a,button,.no-open')) return; CQA.go(el.dataset.href); };
   document.addEventListener('keydown', (e) => {
@@ -150,7 +162,7 @@
         const team = fd.get('team').trim();
         const dataset = fd.get('dataset') || sets[0][0];
         try { localStorage.setItem('cqa.team', team); } catch (e) {}
-        const doc = await api(`/export?checklist_id=${encodeURIComponent(S.checklist)}&dataset=${encodeURIComponent(dataset)}&team=${encodeURIComponent(team)}`);
+        const doc = await api(`/export?checklist_id=${encodeURIComponent(S.checklist === '*' ? 'official' : S.checklist)}&dataset=${encodeURIComponent(dataset)}&team=${encodeURIComponent(team)}`);
         const problems = doc._check || [];
         delete doc._check;
         CQA.downloadJson(doc, 'results.json');
