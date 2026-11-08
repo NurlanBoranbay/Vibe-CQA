@@ -1,7 +1,8 @@
 """Load the DEV dialogs and the already-computed evaluations into the store,
 so the UI works without spending on model calls.
 
-    python -m cqa.seed                 # data/dev/dev_raw.json + data/seed/dev_evaluations.json
+    python -m cqa.seed                 # new database: the demo snapshot (data/seed/demo.sqlite) if present
+    python -m cqa.seed --no-demo       # data/dev/dev_raw.json + data/seed/dev_evaluations.json only
     python -m cqa.seed --force         # overwrite evaluations that already exist
 """
 
@@ -10,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 from pathlib import Path
 
 from . import scoring
@@ -27,7 +29,16 @@ def main() -> None:
     ap.add_argument("--evaluations", default=str(ROOT / "data" / "seed" / "dev_evaluations.json"))
     ap.add_argument("--dataset", default="DEV")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--no-demo", action="store_true", help="ignore data/seed/demo.sqlite")
     a = ap.parse_args()
+
+    demo = ROOT / "data" / "seed" / "demo.sqlite"
+    if not a.no_demo and demo.exists() and not Path(a.db).exists():
+        # the demo state: DEV and the control set evaluated, sample appeals, checklists, runs
+        Path(a.db).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(demo, a.db)
+        print(f"demo snapshot → {a.db}")
+        return
 
     store = Store(a.db)
     for f in ("official.json",):
