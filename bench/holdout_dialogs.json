@@ -1,0 +1,695 @@
+{
+  "error": "",
+  "isSuccess": true,
+  "data": {
+    "dataset_group_id": "HOLDOUT",
+    "total_records": 10,
+    "records": [
+      {
+        "conversation_id": "h-ru-chat-01",
+        "channel": "agent chat",
+        "language": "RU",
+        "audio_url": null,
+        "transcript": [
+          {
+            "timestamp": "00:00",
+            "speaker": "bot",
+            "text": "Здравствуйте! Я виртуальный помощник Freedom Broker. Опишите, пожалуйста, ваш вопрос."
+          },
+          {
+            "timestamp": "00:20",
+            "speaker": "client",
+            "text": "Подала заявку на вывод 500 000 тенге три дня назад, деньги до сих пор не пришли на карту."
+          },
+          {
+            "timestamp": "00:24",
+            "speaker": "system",
+            "text": "Диалог переведён на оператора."
+          },
+          {
+            "timestamp": "00:51",
+            "speaker": "operator",
+            "text": "Вижу, что вопрос касается вывода средств. Чтобы проверить заявку, назовите, пожалуйста, номер договора и кодовое слово."
+          },
+          {
+            "timestamp": "01:30",
+            "speaker": "client",
+            "text": "Договор 4417-0921, кодовое слово «Байтерек»."
+          },
+          {
+            "timestamp": "01:52",
+            "speaker": "operator",
+            "text": "Спасибо, данные подтверждены. Уточните, пожалуйста: вывод был на карту Freedom Bank или на карту другого банка? И какой датой оформлена заявка?"
+          },
+          {
+            "timestamp": "02:10",
+            "speaker": "client",
+            "text": "На карту Halyk, заявка от 3 ноября."
+          },
+          {
+            "timestamp": "04:05",
+            "speaker": "operator",
+            "text": "Заявка от 3 ноября на 500 000 ₸ исполнена брокером 5 ноября, платёж отправлен в Halyk Bank. Зачисление на карту другого банка обычно занимает 1–2 рабочих дня с момента отправки."
+          },
+          {
+            "timestamp": "04:40",
+            "speaker": "client",
+            "text": "То есть сегодня-завтра должны прийти?"
+          },
+          {
+            "timestamp": "04:58",
+            "speaker": "operator",
+            "text": "Да, ожидаем зачисление не позднее следующего рабочего дня. Если средства не поступят до конца следующего рабочего дня, напишите нам — мы направим запрос в банк с номером платёжного поручения."
+          },
+          {
+            "timestamp": "05:20",
+            "speaker": "client",
+            "text": "Хорошо, спасибо."
+          },
+          {
+            "timestamp": "05:35",
+            "speaker": "operator",
+            "text": "Итак: заявка исполнена, платёж отправлен в Halyk Bank, зачисление ожидается в течение следующего рабочего дня. Могу ли я ещё чем-то помочь?"
+          },
+          {
+            "timestamp": "05:50",
+            "speaker": "client",
+            "text": "Нет, всё."
+          },
+          {
+            "timestamp": "06:02",
+            "speaker": "operator",
+            "text": "Спасибо за обращение, хорошего дня! До свидания."
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-ru-chat-02",
+        "channel": "agent chat",
+        "language": "RU",
+        "audio_url": null,
+        "transcript": [
+          {
+            "timestamp": "00:00",
+            "speaker": "system",
+            "text": "Клиент авторизован в приложении. Верификация пройдена: ИИН и одноразовый код подтверждены (Freedom ID)."
+          },
+          {
+            "timestamp": "00:05",
+            "speaker": "client",
+            "text": "Добрый день, у меня заблокирован счёт, не могу торговать. Что случилось??"
+          },
+          {
+            "timestamp": "00:30",
+            "speaker": "operator",
+            "text": "Здравствуйте! Меня зовут Данияр, компания Freedom Broker. Сейчас разберёмся. Подскажите, пожалуйста, какое сообщение вы видите при попытке выставить заявку и с какого числа это началось?"
+          },
+          {
+            "timestamp": "01:10",
+            "speaker": "client",
+            "text": "Пишет «Операции ограничены. Обратитесь в поддержку». Со вчерашнего дня."
+          },
+          {
+            "timestamp": "01:25",
+            "speaker": "operator",
+            "text": "Понял. Мне нужно проверить статус счёта в системе, это займёт пару минут. Пожалуйста, оставайтесь в чате."
+          },
+          {
+            "timestamp": "03:05",
+            "speaker": "operator",
+            "text": "Спасибо, что подождали. Ограничение установлено, потому что в анкете указано удостоверение личности со сроком действия до 1 ноября 2026 года — оно истекло, и по требованиям законодательства операции по счёту приостановлены до обновления документа."
+          },
+          {
+            "timestamp": "03:40",
+            "speaker": "client",
+            "text": "И что, нельзя было предупредить? Я вообще ничего не получал!"
+          },
+          {
+            "timestamp": "04:05",
+            "speaker": "operator",
+            "text": "Уведомления приходили в приложении и на почту ещё в начале октября — их всё-таки стоит читать. Чтобы снять ограничение, загрузите новое удостоверение в приложении: Профиль → Документы → Обновить документ. Проверка занимает до 1 рабочего дня, после чего ограничение снимается автоматически."
+          },
+          {
+            "timestamp": "04:50",
+            "speaker": "client",
+            "text": "Ладно. Загружу сегодня."
+          },
+          {
+            "timestamp": "05:02",
+            "speaker": "operator",
+            "text": "Хорошо. Итак: счёт ограничен из-за истёкшего удостоверения; после загрузки нового документа и проверки (до 1 рабочего дня) торговля снова станет доступна. Есть ли ещё вопросы, с которыми я могу помочь?"
+          },
+          {
+            "timestamp": "05:20",
+            "speaker": "client",
+            "text": "Нет."
+          },
+          {
+            "timestamp": "05:28",
+            "speaker": "operator",
+            "text": "Спасибо за обращение, всего доброго, до свидания!"
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-ru-call-01",
+        "channel": "voice call",
+        "language": "RU",
+        "audio_url": "https://example.invalid/audio/h-ru-call-01.mp3",
+        "transcript": [
+          {
+            "timestamp": "2026-10-14T11:02:05+05:00",
+            "speaker": "operator",
+            "text": "Добрый день! Компания Freedom Broker, меня зовут Алия. Чем могу помочь?"
+          },
+          {
+            "timestamp": "2026-10-14T11:02:12+05:00",
+            "speaker": "client",
+            "text": "Здравствуйте. Мой номер +7 701 555 12 34, я на него счёт открывал. Вчера продал акции Apple, а деньги к выводу недоступны. Почему?"
+          },
+          {
+            "timestamp": "2026-10-14T11:02:30+05:00",
+            "speaker": "operator",
+            "text": "Сейчас проверим. Назовите, пожалуйста, номер вашего договора."
+          },
+          {
+            "timestamp": "2026-10-14T11:02:41+05:00",
+            "speaker": "client",
+            "text": "Договор 5520-3318."
+          },
+          {
+            "timestamp": "2026-10-14T11:02:50+05:00",
+            "speaker": "operator",
+            "text": "Спасибо. Уточните, пожалуйста: продажа была на американском рынке, верно? И какую сумму вы хотите вывести?"
+          },
+          {
+            "timestamp": "2026-10-14T11:03:05+05:00",
+            "speaker": "client",
+            "text": "Да, американский рынок. Хочу вывести всё, около трёх тысяч долларов."
+          },
+          {
+            "timestamp": "2026-10-14T11:03:12+05:00",
+            "speaker": "operator",
+            "text": "Хорошо, оставайтесь, пожалуйста, на линии, я посмотрю по сделке."
+          },
+          {
+            "timestamp": "2026-10-14T11:04:40+05:00",
+            "speaker": "operator",
+            "text": "Так, вижу: вчера исполнена продажа 15 акций Apple на сумму 3 412 долларов, на счёте сейчас свободный остаток 3 412 долларов, но к выводу он пока недоступен."
+          },
+          {
+            "timestamp": "2026-10-14T11:04:58+05:00",
+            "speaker": "client",
+            "text": "А когда будет доступен?"
+          },
+          {
+            "timestamp": "2026-10-14T11:05:06+05:00",
+            "speaker": "operator",
+            "text": "По американским акциям расчёты проходят в режиме T+3, то есть деньги станут доступны к выводу через три рабочих дня после сделки. После этого можно подать заявку на вывод в приложении."
+          },
+          {
+            "timestamp": "2026-10-14T11:05:20+05:00",
+            "speaker": "client",
+            "text": "Понятно, подожду."
+          },
+          {
+            "timestamp": "2026-10-14T11:05:26+05:00",
+            "speaker": "operator",
+            "text": "Да. Подводя итог: продажа исполнена, средства станут доступны к выводу через три рабочих дня, затем оформите заявку в разделе «Вывод средств». Могу ещё чем-то помочь?"
+          },
+          {
+            "timestamp": "2026-10-14T11:05:35+05:00",
+            "speaker": "client",
+            "text": "Нет, спасибо."
+          },
+          {
+            "timestamp": "2026-10-14T11:05:39+05:00",
+            "speaker": "operator",
+            "text": "Спасибо за звонок, до свидания!"
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-ru-call-02",
+        "channel": "voice call",
+        "language": "RU",
+        "audio_url": "https://example.invalid/audio/h-ru-call-02.mp3",
+        "transcript": [
+          {
+            "timestamp": "2026-10-20T15:20:01+05:00",
+            "speaker": "operator",
+            "text": "Здравствуйте, Freedom Broker, меня зовут Ержан. Слушаю вас."
+          },
+          {
+            "timestamp": "2026-10-20T15:20:07+05:00",
+            "speaker": "client",
+            "text": "Здравствуйте. Мне пришло СМС про маржин-колл, я не понимаю, что делать."
+          },
+          {
+            "timestamp": "2026-10-20T15:20:15+05:00",
+            "speaker": "operator",
+            "text": "Помогу разобраться. Для доступа к счёту назовите, пожалуйста, номер договора и дату рождения."
+          },
+          {
+            "timestamp": "2026-10-20T15:20:30+05:00",
+            "speaker": "client",
+            "text": "Договор 3109-7745, двенадцатое марта восемьдесят девятого года."
+          },
+          {
+            "timestamp": "2026-10-20T15:20:44+05:00",
+            "speaker": "operator",
+            "text": "Спасибо, данные совпадают. Скажите, уведомление пришло сегодня утром? И вы хотите сохранить позиции или готовы частично их закрыть?"
+          },
+          {
+            "timestamp": "2026-10-20T15:20:58+05:00",
+            "speaker": "client",
+            "text": "Утром. Позиции хотелось бы сохранить."
+          },
+          {
+            "timestamp": "2026-10-20T15:21:10+05:00",
+            "speaker": "operator",
+            "text": "Понял. Сейчас уровень маржи у вас ниже минимального требования: нужно либо пополнить счёт примерно на 1 200 долларов, либо закрыть часть позиций. Если до закрытия торговой сессии уровень не будет восстановлен, брокер может принудительно закрыть часть позиций."
+          },
+          {
+            "timestamp": "2026-10-20T15:21:40+05:00",
+            "speaker": "client",
+            "text": "Хорошо, пополню. А как быстрее всего зачислить?"
+          },
+          {
+            "timestamp": "2026-10-20T15:21:48+05:00",
+            "speaker": "operator",
+            "text": "Быстрее всего — пополнение с карты в приложении, зачисление почти мгновенное. И чтобы я зафиксировал ваше намерение пополнить счёт, продиктуйте, пожалуйста, код из СМС, который сейчас придёт, — это просто формальность."
+          },
+          {
+            "timestamp": "2026-10-20T15:22:10+05:00",
+            "speaker": "client",
+            "text": "Э-э… 4-8-2-1-9-0."
+          },
+          {
+            "timestamp": "2026-10-20T15:22:16+05:00",
+            "speaker": "operator",
+            "text": "Отлично, отметил."
+          },
+          {
+            "timestamp": "2026-10-20T15:22:25+05:00",
+            "speaker": "client",
+            "text": "Спасибо, всё понятно."
+          },
+          {
+            "timestamp": "2026-10-20T15:22:31+05:00",
+            "speaker": "operator",
+            "text": "Итак: пополняете счёт примерно на 1 200 долларов с карты через приложение до конца торговой сессии, после этого маржинальное требование будет выполнено. Есть ли ещё вопросы?"
+          },
+          {
+            "timestamp": "2026-10-20T15:22:40+05:00",
+            "speaker": "client",
+            "text": "Нет."
+          },
+          {
+            "timestamp": "2026-10-20T15:22:43+05:00",
+            "speaker": "operator",
+            "text": "Хорошо."
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-ru-chat-03",
+        "channel": "agent chat",
+        "language": "RU",
+        "audio_url": null,
+        "transcript": [
+          {
+            "timestamp": "00:00",
+            "speaker": "client",
+            "text": "Добрый вечер. Подскажите по тарифам."
+          },
+          {
+            "timestamp": "00:40",
+            "speaker": "operator",
+            "text": "Добрый вечер! Меня зовут Мадина, Freedom Broker. С удовольствием подскажу. Какой именно вопрос по тарифам вас интересует?"
+          },
+          {
+            "timestamp": "01:05",
+            "speaker": "client",
+            "text": "Я на тарифе «Стандарт», хочу купить акций примерно на 200 000 тенге. Сколько составит комиссия?"
+          },
+          {
+            "timestamp": "01:20",
+            "speaker": "operator",
+            "text": "Уточните, пожалуйста, вы планируете покупать на KASE или на американском рынке?"
+          },
+          {
+            "timestamp": "01:45",
+            "speaker": "client",
+            "text": "KASE."
+          },
+          {
+            "timestamp": "01:55",
+            "speaker": "operator",
+            "text": "Минутку, уточню актуальную ставку по тарифу."
+          },
+          {
+            "timestamp": "03:20",
+            "speaker": "operator",
+            "text": "Спасибо за ожидание! По тарифу «Стандарт» на KASE комиссия брокера составляет 0,5% от суммы сделки. При покупке на 200 000 тенге это составит 10 000 тенге."
+          },
+          {
+            "timestamp": "03:50",
+            "speaker": "client",
+            "text": "Ого, дорого. Ладно, понял, подумаю."
+          },
+          {
+            "timestamp": "03:52",
+            "speaker": "system",
+            "text": "Клиент покинул чат."
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-kz-chat-01",
+        "channel": "agent chat",
+        "language": "KZ",
+        "audio_url": null,
+        "transcript": [
+          {
+            "timestamp": "00:00",
+            "speaker": "client",
+            "text": "Сәлеметсіз бе! Салық декларациясы үшін маған 2025 жылғы брокерлік есеп керек."
+          },
+          {
+            "timestamp": "00:25",
+            "speaker": "operator",
+            "text": "Сәлеметсіз бе! Менің атым Айгерім, Freedom Broker қолдау қызметі. Көмектесемін. Алдымен сәйкестендіруден өтейік: келісімшарт нөмірін және кодтық сөзді жазыңызшы."
+          },
+          {
+            "timestamp": "01:00",
+            "speaker": "client",
+            "text": "Келісімшарт 6612-4480, кодтық сөз «Алатау»."
+          },
+          {
+            "timestamp": "01:12",
+            "speaker": "operator",
+            "text": "Рақмет, деректер расталды. Нақтылап алайын: есеп 2025 жылдың 1 қаңтарынан 31 желтоқсанына дейінгі толық кезеңге керек пе? Қай тілде және қандай форматта — PDF әлде Excel?"
+          },
+          {
+            "timestamp": "01:40",
+            "speaker": "client",
+            "text": "Иә, толық жыл. Орыс тілінде, PDF."
+          },
+          {
+            "timestamp": "01:50",
+            "speaker": "operator",
+            "text": "Түсіндім. Есепті жүйеде қалыптастырып жатырмын, бір-екі минут күте тұрыңызшы."
+          },
+          {
+            "timestamp": "03:05",
+            "speaker": "operator",
+            "text": "Күткеніңізге рақмет! Есеп қалыптастырылып, тіркелген электрондық поштаңызға жіберілді. Оны қосымшадан да жүктей аласыз: «Профиль» → «Есептер» → «Брокерлік есеп» бөлімінде кезеңді таңдап, «Жүктеу» батырмасын басыңыз."
+          },
+          {
+            "timestamp": "03:40",
+            "speaker": "client",
+            "text": "Келді, рақмет!"
+          },
+          {
+            "timestamp": "03:50",
+            "speaker": "operator",
+            "text": "Қорытындылай кетсем: 2025 жылғы брокерлік есеп орыс тілінде PDF форматында поштаңызға жіберілді, қажет болса оны қосымшадан қайта жүктей аласыз. Тағы басқа сұрақтарыңыз бар ма?"
+          },
+          {
+            "timestamp": "04:05",
+            "speaker": "client",
+            "text": "Жоқ, бәрі түсінікті."
+          },
+          {
+            "timestamp": "04:12",
+            "speaker": "operator",
+            "text": "Хабарласқаныңызға рақмет! Сау болыңыз, күніңіз сәтті өтсін!"
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-kz-call-01",
+        "channel": "voice call",
+        "language": "KZ",
+        "audio_url": "https://example.invalid/audio/h-kz-call-01.mp3",
+        "transcript": [
+          {
+            "timestamp": "2026-10-22T10:15:02+05:00",
+            "speaker": "operator",
+            "text": "Сәлеметсіз бе! Freedom Broker, менің атым Нұрлан. Сізге қалай көмектесе аламын?"
+          },
+          {
+            "timestamp": "2026-10-22T10:15:09+05:00",
+            "speaker": "client",
+            "text": "Сәлеметсіз бе. Жаңа IPO туралы естідім, оған қалай қатысуға болады, жалпы түсіндіріп берсеңіз."
+          },
+          {
+            "timestamp": "2026-10-22T10:15:20+05:00",
+            "speaker": "operator",
+            "text": "Әрине. Сіз қай IPO туралы сұрап тұрсыз — қосымшадағы американдық компанияның IPO-сы ма, әлде KASE-дегі орналастыру ма?"
+          },
+          {
+            "timestamp": "2026-10-22T10:15:35+05:00",
+            "speaker": "client",
+            "text": "Американдық, қосымшада көрдім."
+          },
+          {
+            "timestamp": "2026-10-22T10:15:45+05:00",
+            "speaker": "operator",
+            "text": "Түсіндім. Қатысу үшін қосымшада «IPO» бөліміне кіріп, керекті орналастыруды таңдайсыз, соманы көрсетіп өтінім бересіз. Өтінім берілгенде сома шотыңызда бұғатталады. Өтінімдерді қабылдау орналастыру күнінен бұрын жабылады, ал бөлу нәтижесін орналастырудан кейін көресіз — өтінім толық қанағаттандырылмауы мүмкін, қалған сома шотқа қайтарылады."
+          },
+          {
+            "timestamp": "2026-10-22T10:16:30+05:00",
+            "speaker": "client",
+            "text": "Жақсы. Ал сіз қалай ойлайсыз, қатысу керек пе? Тәуекелі жоғары емес пе?"
+          },
+          {
+            "timestamp": "2026-10-22T10:16:40+05:00",
+            "speaker": "operator",
+            "text": "Ресми түрде кеңес бере алмаймын ғой, бірақ мен өзім болсам осы IPO-ға міндетті түрде қатысар едім — компания мықты, бірінші күні акциялар өсетін шығар. Сізге де қатысуды ұсынар едім, бірақ шешім, әрине, өзіңізде."
+          },
+          {
+            "timestamp": "2026-10-22T10:17:05+05:00",
+            "speaker": "client",
+            "text": "Хм, жарайды, ойланып көремін."
+          },
+          {
+            "timestamp": "2026-10-22T10:17:12+05:00",
+            "speaker": "operator",
+            "text": "Сонымен: IPO-ға қосымшадағы «IPO» бөлімі арқылы өтінім бересіз, сома өтінім кезінде бұғатталады, бөлу нәтижесі орналастырудан кейін шығады. Тағы қандай сұрақтарыңыз бар?"
+          },
+          {
+            "timestamp": "2026-10-22T10:17:25+05:00",
+            "speaker": "client",
+            "text": "Басқа сұрағым жоқ, рақмет."
+          },
+          {
+            "timestamp": "2026-10-22T10:17:30+05:00",
+            "speaker": "operator",
+            "text": "Хабарласқаныңызға рақмет, сау болыңыз!"
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-kz-chat-02",
+        "channel": "agent chat",
+        "language": "KZ",
+        "audio_url": null,
+        "transcript": [
+          {
+            "timestamp": "00:00",
+            "speaker": "bot",
+            "text": "Сәлеметсіз бе! Мен Freedom Broker виртуалды көмекшісімін. Сұрағыңызды жазыңыз."
+          },
+          {
+            "timestamp": "00:15",
+            "speaker": "client",
+            "text": "Сәлеметсіз бе, приложение вылетает, когда открываю портфель. Ордерлерім орындалды ма, көре алмай жатырмын. Менің ЖСН 900312301456, телефон +7 701 222 33 44."
+          },
+          {
+            "timestamp": "00:18",
+            "speaker": "system",
+            "text": "Диалог операторға ауыстырылды."
+          },
+          {
+            "timestamp": "00:50",
+            "speaker": "operator",
+            "text": "Сәлеметсіз бе! Менің атым Аслан, Freedom Broker қолдау қызметі. Тексердім: бүгінгі екі ордеріңіз де орындалды — Tesla 3 акция және Kaspi.kz 10 акция, шотыңызда бос қалдық 1 240 доллар."
+          },
+          {
+            "timestamp": "01:15",
+            "speaker": "client",
+            "text": "А, отлично, рахмет. А с приложением что делать?"
+          },
+          {
+            "timestamp": "01:25",
+            "speaker": "operator",
+            "text": "Нақтылап алайын: телефоныңыз Android па, әлде iPhone ба? Қосымшаның қай нұсқасы орнатылған және қате шыққанда қандай хабарлама көрсетіледі?"
+          },
+          {
+            "timestamp": "01:50",
+            "speaker": "client",
+            "text": "Android, версия 4.12, просто закрывается без сообщения."
+          },
+          {
+            "timestamp": "02:05",
+            "speaker": "operator",
+            "text": "Түсіндім. Android-тағы 4.12 нұсқасында портфельді ашқанда осындай ақау белгілі. Play Market-тен қосымшаны соңғы нұсқаға жаңартыңыз, содан кейін кэшті тазалаңыз: Баптаулар → Қосымшалар → Freedom → Жад → Кэшті тазалау. Егер қате қайталанса, жазыңыз — техникалық бөлімге өтінім тіркейміз."
+          },
+          {
+            "timestamp": "02:40",
+            "speaker": "client",
+            "text": "Жаңарттым, теперь работает."
+          },
+          {
+            "timestamp": "02:50",
+            "speaker": "operator",
+            "text": "Керемет! Қорытынды: ордерлеріңіз орындалды, ал қосымшадағы ақау жаңартудан кейін шешілді. Тағы көмек керек пе?"
+          },
+          {
+            "timestamp": "03:02",
+            "speaker": "client",
+            "text": "Жоқ, рахмет."
+          },
+          {
+            "timestamp": "03:08",
+            "speaker": "operator",
+            "text": "Хабарласқаныңызға рақмет, сау болыңыз!"
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-en-call-01",
+        "channel": "voice call",
+        "language": "EN",
+        "audio_url": "https://example.invalid/audio/h-en-call-01.mp3",
+        "transcript": [
+          {
+            "timestamp": "2026-10-27T09:40:03+05:00",
+            "speaker": "operator",
+            "text": "Good morning, Freedom Broker, this is Daniel speaking. How can I help you?"
+          },
+          {
+            "timestamp": "2026-10-27T09:40:10+05:00",
+            "speaker": "client",
+            "text": "Hi. I've been locked out of the app — I entered the wrong password too many times and now it says my login is blocked."
+          },
+          {
+            "timestamp": "2026-10-27T09:40:18+05:00",
+            "speaker": "operator",
+            "text": "I can help with that. First I need to verify your identity: could you give me your contract number and your date of birth, please?"
+          },
+          {
+            "timestamp": "2026-10-27T09:40:32+05:00",
+            "speaker": "client",
+            "text": "Contract 7780-1254, born the fourth of July 1991."
+          },
+          {
+            "timestamp": "2026-10-27T09:40:45+05:00",
+            "speaker": "operator",
+            "text": "Thank you, that matches. Just to confirm — it's only the login to the mobile app that's blocked, not trading on the account, right? And do you still have access to the email registered with us?"
+          },
+          {
+            "timestamp": "2026-10-27T09:41:00+05:00",
+            "speaker": "client",
+            "text": "Right, just the login. Yes, same email. Honestly, I don't even remember setting that password."
+          },
+          {
+            "timestamp": "2026-10-27T09:41:08+05:00",
+            "speaker": "operator",
+            "text": "Well, that's what the 'Forgot password' button is for, isn't it? Anyway, let me unblock the login on my side — please stay on the line, it'll take a minute or two."
+          },
+          {
+            "timestamp": "2026-10-27T09:42:55+05:00",
+            "speaker": "operator",
+            "text": "Thank you for holding. The login is unblocked. I've sent a password-reset link to your registered email; it's valid for 24 hours. Open it, set a new password and log in to the app with it."
+          },
+          {
+            "timestamp": "2026-10-27T09:43:30+05:00",
+            "speaker": "client",
+            "text": "Got it, the email is here. I've reset it and I'm in."
+          },
+          {
+            "timestamp": "2026-10-27T09:43:38+05:00",
+            "speaker": "operator",
+            "text": "Great. So, to sum up: your login was unblocked, you reset the password via the email link and you're back in the app. Have a good day, goodbye!"
+          },
+          {
+            "timestamp": "2026-10-27T09:43:45+05:00",
+            "speaker": "client",
+            "text": "Bye."
+          }
+        ]
+      },
+      {
+        "conversation_id": "h-en-chat-01",
+        "channel": "agent chat",
+        "language": "EN",
+        "audio_url": null,
+        "transcript": [
+          {
+            "timestamp": "00:00",
+            "speaker": "bot",
+            "text": "Hello! I'm the Freedom Broker virtual assistant. To connect you with an operator, please enter your contract number and code word."
+          },
+          {
+            "timestamp": "00:22",
+            "speaker": "client",
+            "text": "8834-2207, code word Nomad"
+          },
+          {
+            "timestamp": "00:23",
+            "speaker": "system",
+            "text": "Client verified: contract number and code word confirmed."
+          },
+          {
+            "timestamp": "00:30",
+            "speaker": "client",
+            "text": "I hold Coca-Cola shares. The news said the dividend record date was last Friday, but nothing has arrived in my account. Where is my money?"
+          },
+          {
+            "timestamp": "00:31",
+            "speaker": "system",
+            "text": "Chat transferred to an operator."
+          },
+          {
+            "timestamp": "01:05",
+            "speaker": "operator",
+            "text": "Hi! I see your question about the dividend, let me look into it. Could you confirm the ticker and how many shares you held on the record date?"
+          },
+          {
+            "timestamp": "01:30",
+            "speaker": "client",
+            "text": "KO, 120 shares."
+          },
+          {
+            "timestamp": "01:48",
+            "speaker": "operator",
+            "text": "Thanks. I can see 120 KO shares in your portfolio on the record date, so you are entitled to this dividend. The record date only determines who receives the dividend; the money is credited on the payment date, which for this dividend is 1 December. Until then nothing will show in your account, and on the payment date it will be credited net of withholding tax."
+          },
+          {
+            "timestamp": "02:20",
+            "speaker": "client",
+            "text": "Oh, I see. So I just wait until 1 December?"
+          },
+          {
+            "timestamp": "02:28",
+            "speaker": "operator",
+            "text": "Exactly. To sum up: you're entitled to the KO dividend, the payment will arrive on 1 December net of withholding tax, and you'll see it under Portfolio → Transactions. Is there anything else I can help you with?"
+          },
+          {
+            "timestamp": "02:40",
+            "speaker": "client",
+            "text": "No, that's all, thanks."
+          },
+          {
+            "timestamp": "02:45",
+            "speaker": "operator",
+            "text": "You're welcome! Have a great day, goodbye."
+          }
+        ]
+      }
+    ]
+  }
+}

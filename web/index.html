@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CQA · Контроль качества</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Crect width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%232563EB%22/%3E%3Cpath d=%22M12 5l1.6 4.2 4.2 1.6-4.2 1.6L12 17l-1.6-4.6-4.2-1.6 4.2-1.6z%22 fill=%22white%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/app.css">
+<script>
+  /* Host configuration. In a Dynamics 365 web resource set apiBase to the CQA service URL. */
+  window.CQA_CONFIG = Object.assign({ apiBase: '' }, window.CQA_CONFIG || {});
+  try { document.documentElement.dataset.theme = localStorage.getItem('cqa.theme') || 'light'; } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip" href="#view">К содержимому</a>
+<div class="app-shell">
+  <aside class="side" id="side" aria-label="Модули"></aside>
+  <div class="app-main">
+    <header class="top"><div class="top-inner" id="top-inner">
+      <button class="icon-btn menu-btn" data-act="menu" aria-label="Модули" aria-expanded="false" aria-controls="side"></button>
+      <div class="page-head" id="head-slot"></div>
+      <div class="tools" id="tools"></div>
+    </div></header>
+    <main class="content"><div id="view" class="view" tabindex="-1"></div></main>
+  </div>
+</div>
+<div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+<script src="js/core.js"></script>
+<script src="js/pages/dialogs.js"></script>
+<script src="js/pages/evaluations.js"></script>
+<script src="js/pages/card.js"></script>
+<script src="js/pages/appeals.js"></script>
+<script src="js/pages/checklists.js"></script>
+<script src="js/pages/prompts.js"></script>
+<script src="js/pages/analytics.js"></script>
+<script src="js/pages/accuracy.js"></script>
+<script src="js/pages/mystats.js"></script>
+<script src="js/pages/runs.js"></script>
+<script src="js/pages/models.js"></script>
+<script>CQA.start();</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+httpx>=0.27,<1
+pydantic>=2.7,<3
+# optional: prosody features for audio criteria (intonation); large, so not installed by default
+# librosa

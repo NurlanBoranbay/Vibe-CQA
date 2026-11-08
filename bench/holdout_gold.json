@@ -1,0 +1,650 @@
+{
+  "h-ru-chat-01": {
+    "greeting": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        3
+      ]
+    },
+    "identification": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        3,
+        4
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        5
+      ]
+    },
+    "solution": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        7,
+        9
+      ]
+    },
+    "hold": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        6,
+        7
+      ]
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        11,
+        13
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  },
+  "h-ru-chat-02": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        2
+      ]
+    },
+    "identification": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        0
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        2
+      ]
+    },
+    "solution": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        5,
+        7
+      ]
+    },
+    "hold": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        4,
+        5
+      ]
+    },
+    "politeness": {
+      "accept": [
+        1,
+        0
+      ],
+      "evidence": [
+        7
+      ]
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        9,
+        11
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  },
+  "h-ru-call-01": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        0
+      ]
+    },
+    "identification": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        2,
+        7
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        4
+      ]
+    },
+    "solution": {
+      "accept": [
+        0
+      ],
+      "evidence": [
+        9,
+        11
+      ]
+    },
+    "hold": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        6,
+        7
+      ]
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        11,
+        13
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  },
+  "h-ru-call-02": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        0
+      ]
+    },
+    "identification": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        2,
+        3
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        4
+      ]
+    },
+    "solution": {
+      "accept": [
+        2,
+        1
+      ],
+      "evidence": [
+        6,
+        8
+      ]
+    },
+    "hold": {
+      "accept": [
+        "na"
+      ],
+      "evidence": []
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        1
+      ],
+      "evidence": [
+        12,
+        14
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        8
+      ]
+    }
+  },
+  "h-ru-chat-03": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        1
+      ]
+    },
+    "identification": {
+      "accept": [
+        "na"
+      ],
+      "evidence": []
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        1,
+        3
+      ]
+    },
+    "solution": {
+      "accept": [
+        0
+      ],
+      "evidence": [
+        6
+      ]
+    },
+    "hold": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        5,
+        6
+      ]
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        "na"
+      ],
+      "evidence": [
+        8
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  },
+  "h-kz-chat-01": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        1
+      ]
+    },
+    "identification": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        1,
+        2
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        3
+      ]
+    },
+    "solution": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        6
+      ]
+    },
+    "hold": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        5,
+        6
+      ]
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        8,
+        10
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  },
+  "h-kz-call-01": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        0
+      ]
+    },
+    "identification": {
+      "accept": [
+        "na"
+      ],
+      "evidence": []
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        2
+      ]
+    },
+    "solution": {
+      "accept": [
+        2,
+        1
+      ],
+      "evidence": [
+        4
+      ]
+    },
+    "hold": {
+      "accept": [
+        "na"
+      ],
+      "evidence": []
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        8,
+        10
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        6
+      ]
+    }
+  },
+  "h-kz-chat-02": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        3
+      ]
+    },
+    "identification": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        3
+      ]
+    },
+    "needs": {
+      "accept": [
+        2,
+        1
+      ],
+      "evidence": [
+        5
+      ]
+    },
+    "solution": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        3,
+        7
+      ]
+    },
+    "hold": {
+      "accept": [
+        "na"
+      ],
+      "evidence": []
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        9,
+        11
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        3
+      ]
+    }
+  },
+  "h-en-call-01": {
+    "greeting": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        0
+      ]
+    },
+    "identification": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        2,
+        3
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        4
+      ]
+    },
+    "solution": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        7
+      ]
+    },
+    "hold": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        6,
+        7
+      ]
+    },
+    "politeness": {
+      "accept": [
+        1
+      ],
+      "evidence": [
+        6
+      ]
+    },
+    "closing": {
+      "accept": [
+        1
+      ],
+      "evidence": [
+        9
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  },
+  "h-en-chat-01": {
+    "greeting": {
+      "accept": [
+        "no"
+      ],
+      "evidence": [
+        5
+      ]
+    },
+    "identification": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": [
+        2
+      ]
+    },
+    "needs": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        5
+      ]
+    },
+    "solution": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        7,
+        9
+      ]
+    },
+    "hold": {
+      "accept": [
+        "na"
+      ],
+      "evidence": []
+    },
+    "politeness": {
+      "accept": [
+        2
+      ],
+      "evidence": []
+    },
+    "closing": {
+      "accept": [
+        2
+      ],
+      "evidence": [
+        9,
+        11
+      ]
+    },
+    "gross_error": {
+      "accept": [
+        "yes"
+      ],
+      "evidence": []
+    }
+  }
+}

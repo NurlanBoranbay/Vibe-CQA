@@ -1,0 +1,205 @@
+{
+  "error": "",
+  "isSuccess": true,
+  "data": {
+    "dataset_group_id": "BENCH",
+    "total_records": 10,
+    "records": [
+      {
+        "conversation_id": "b-ru-chat-01",
+        "channel": "agent chat",
+        "language": "RU",
+        "audio_url": null,
+        "transcript": [
+          {"timestamp": "00:00", "speaker": "system", "text": "Чат начат. Канал: мобильное приложение"},
+          {"timestamp": "00:00", "speaker": "bot", "text": "Здравствуйте! Я виртуальный помощник Freedom Broker. Опишите ваш вопрос."},
+          {"timestamp": "00:15", "speaker": "client", "text": "Вывел деньги на карту три дня назад, до сих пор не пришли"},
+          {"timestamp": "00:20", "speaker": "system", "text": "Диалог передан оператору"},
+          {"timestamp": "00:41", "speaker": "operator", "text": "Подскажите, пожалуйста, номер договора и кодовое слово."},
+          {"timestamp": "01:02", "speaker": "client", "text": "Договор 4471205, кодовое слово Алатау"},
+          {"timestamp": "01:10", "speaker": "operator", "text": "Спасибо. Уточните, на какую сумму и в какой валюте был вывод?"},
+          {"timestamp": "01:25", "speaker": "client", "text": "500 долларов на карту Kaspi"},
+          {"timestamp": "01:31", "speaker": "operator", "text": "Минуту, проверю статус заявки."},
+          {"timestamp": "02:40", "speaker": "operator", "text": "Спасибо за ожидание. Заявка исполнена брокером 12.03, деньги отправлены банку-получателю. Зачисление долларов на карту стороннего банка занимает до 5 рабочих дней, поэтому срок ещё не истёк. Если к 19.03 не поступят — напишите нам, мы запросим подтверждение SWIFT."},
+          {"timestamp": "02:58", "speaker": "client", "text": "Понятно, спасибо"},
+          {"timestamp": "03:05", "speaker": "operator", "text": "Итак: заявка исполнена, ожидаем зачисление до 19.03. Могу ещё чем-то помочь?"},
+          {"timestamp": "03:12", "speaker": "client", "text": "Нет, всё"},
+          {"timestamp": "03:15", "speaker": "operator", "text": "Хорошего дня! Обращайтесь."}
+        ]
+      },
+      {
+        "conversation_id": "b-ru-chat-02",
+        "channel": "agent chat",
+        "language": "RU",
+        "audio_url": null,
+        "transcript": [
+          {"timestamp": "00:00", "speaker": "bot", "text": "Здравствуйте! Чем могу помочь?"},
+          {"timestamp": "00:10", "speaker": "client", "text": "Хочу купить акции, что посоветуете, чтобы точно заработать?"},
+          {"timestamp": "00:12", "speaker": "system", "text": "Подключён оператор"},
+          {"timestamp": "00:30", "speaker": "operator", "text": "Добрый день, меня зовут Ержан, Freedom Broker."},
+          {"timestamp": "00:45", "speaker": "client", "text": "Так что купить?"},
+          {"timestamp": "01:00", "speaker": "operator", "text": "Берите Tesla, через месяц будет +30%, гарантирую."},
+          {"timestamp": "01:20", "speaker": "client", "text": "А если упадёт?"},
+          {"timestamp": "01:35", "speaker": "operator", "text": "Не упадёт, я же сказал. Вы вообще читаете, что я пишу?"},
+          {"timestamp": "01:50", "speaker": "client", "text": "Ладно, а как купить?"},
+          {"timestamp": "02:05", "speaker": "operator", "text": "В приложении раздел Торговля, найдите тикер TSLA и нажмите Купить."},
+          {"timestamp": "02:20", "speaker": "client", "text": "Ок"}
+        ]
+      },
+      {
+        "conversation_id": "b-ru-call-01",
+        "channel": "voice call",
+        "language": "RU",
+        "audio_url": "https://example.invalid/audio/b-ru-call-01.mp3",
+        "transcript": [
+          {"timestamp": "2026-03-14T10:02:05+05:00", "speaker": "operator", "text": "Freedom Broker, здравствуйте, меня зовут Айгерим. Чем могу помочь?"},
+          {"timestamp": "2026-03-14T10:02:11+05:00", "speaker": "client", "text": "Здравствуйте, не могу зайти в личный кабинет, пишет неверный пароль."},
+          {"timestamp": "2026-03-14T10:02:18+05:00", "speaker": "operator", "text": "Подскажите ваш ИИН и дату рождения для идентификации."},
+          {"timestamp": "2026-03-14T10:02:25+05:00", "speaker": "client", "text": "ИИН 890512300456, двенадцатое мая восемьдесят девятого."},
+          {"timestamp": "2026-03-14T10:02:40+05:00", "speaker": "operator", "text": "Спасибо, вы идентифицированы. Вы недавно меняли телефон или пароль?"},
+          {"timestamp": "2026-03-14T10:02:46+05:00", "speaker": "client", "text": "Да, сменил номер телефона на прошлой неделе."},
+          {"timestamp": "2026-03-14T10:02:55+05:00", "speaker": "operator", "text": "Понятно, тогда код подтверждения уходит на старый номер. Оставайтесь, пожалуйста, на линии, я проверю данные, это займёт около минуты."},
+          {"timestamp": "2026-03-14T10:04:25+05:00", "speaker": "operator", "text": "Спасибо, что подождали. Я обновила номер в системе, сейчас придёт СМС со ссылкой для сброса пароля."},
+          {"timestamp": "2026-03-14T10:04:40+05:00", "speaker": "client", "text": "Да, пришло."},
+          {"timestamp": "2026-03-14T10:04:44+05:00", "speaker": "operator", "text": "Перейдите по ссылке и задайте новый пароль."},
+          {"timestamp": "2026-03-14T10:05:30+05:00", "speaker": "client", "text": "Всё, зашёл, спасибо."},
+          {"timestamp": "2026-03-14T10:05:33+05:00", "speaker": "operator", "text": "До свидания."}
+        ]
+      },
+      {
+        "conversation_id": "b-ru-chat-03",
+        "channel": "agent chat",
+        "language": "RU",
+        "audio_url": null,
+        "transcript": [
+          {"timestamp": "00:00", "speaker": "bot", "text": "Здравствуйте! Выберите тему: 1) Счёт 2) Торговля 3) Другое"},
+          {"timestamp": "00:05", "speaker": "client", "text": "1"},
+          {"timestamp": "00:06", "speaker": "bot", "text": "Соединяю с оператором."},
+          {"timestamp": "00:25", "speaker": "operator", "text": "Здравствуйте! Меня зовут Дана. Слушаю вас."},
+          {"timestamp": "00:40", "speaker": "client", "text": "Какой у меня сейчас баланс? Номер телефона +7 701 555 22 11"},
+          {"timestamp": "00:48", "speaker": "operator", "text": "Одну секунду."},
+          {"timestamp": "01:58", "speaker": "operator", "text": "На вашем брокерском счёте 1 245 000 тенге и 300 долларов."},
+          {"timestamp": "02:15", "speaker": "client", "text": "А почему долларов так мало, я же покупал вчера"},
+          {"timestamp": "02:22", "speaker": "operator", "text": "Уточните, пожалуйста, что именно вы покупали и на какую сумму?"},
+          {"timestamp": "02:40", "speaker": "client", "text": "Облигации на 2000 долларов"},
+          {"timestamp": "02:55", "speaker": "operator", "text": "Сделка от 13.03 на 2000 USD исполнена, поэтому свободный остаток долларов уменьшился до 300. Облигации отображаются в разделе Портфель."},
+          {"timestamp": "03:01", "speaker": "system", "text": "Клиент покинул чат"}
+        ]
+      },
+      {
+        "conversation_id": "b-kz-chat-01",
+        "channel": "agent chat",
+        "language": "KZ",
+        "audio_url": null,
+        "transcript": [
+          {"timestamp": "00:00", "speaker": "bot", "text": "Сәлеметсіз бе! Мен Freedom Broker виртуалды көмекшісімін. Сұрағыңызды жазыңыз."},
+          {"timestamp": "00:12", "speaker": "client", "text": "Шот ашу үшін қандай құжаттар керек?"},
+          {"timestamp": "00:14", "speaker": "system", "text": "Оператор қосылды"},
+          {"timestamp": "00:35", "speaker": "operator", "text": "Сәлеметсіз бе! Менің атым Асель, Freedom Broker. Сізге шетелдік акцияларға арналған шот керек пе, әлде тек Қазақстан нарығына ма?"},
+          {"timestamp": "00:50", "speaker": "client", "text": "Шетелдік акциялар үшін"},
+          {"timestamp": "01:05", "speaker": "operator", "text": "Түсінікті. Сізге тек жеке куәлік немесе төлқұжат керек. Шотты Freedom қосымшасында онлайн ашуға болады, биометриялық тексеру шамамен 10 минут алады."},
+          {"timestamp": "01:20", "speaker": "client", "text": "Комиссия қанша?"},
+          {"timestamp": "01:32", "speaker": "operator", "text": "Тарифке байланысты: «Стандарт» тарифінде мәміле сомасының 0,25%. Толық тарифтер сайтта «Тарифтер» бөлімінде."},
+          {"timestamp": "01:45", "speaker": "client", "text": "Рақмет"},
+          {"timestamp": "01:52", "speaker": "operator", "text": "Қорытындылай кетейін: шот қосымшада жеке куәлікпен ашылады, комиссия 0,25%. Тағы сұрақтарыңыз бар ма?"},
+          {"timestamp": "02:01", "speaker": "client", "text": "Жоқ"},
+          {"timestamp": "02:05", "speaker": "operator", "text": "Сау болыңыз, күніңіз сәтті өтсін!"}
+        ]
+      },
+      {
+        "conversation_id": "b-kz-call-01",
+        "channel": "voice call",
+        "language": "KZ",
+        "audio_url": "https://example.invalid/audio/b-kz-call-01.mp3",
+        "transcript": [
+          {"timestamp": "2026-03-15T15:20:01+05:00", "speaker": "operator", "text": "Freedom Broker, сәлеметсіз бе."},
+          {"timestamp": "2026-03-15T15:20:05+05:00", "speaker": "client", "text": "Сәлеметсіз бе, маған комиссия екі рет алынды, неге?"},
+          {"timestamp": "2026-03-15T15:20:12+05:00", "speaker": "operator", "text": "ЖСН айтыңызшы."},
+          {"timestamp": "2026-03-15T15:20:18+05:00", "speaker": "client", "text": "920304400123"},
+          {"timestamp": "2026-03-15T15:20:35+05:00", "speaker": "operator", "text": "Иә, көрдім. Бұл екі рет алынған бір комиссия емес — біреуі брокерлік, біреуі биржалық комиссия."},
+          {"timestamp": "2026-03-15T15:20:48+05:00", "speaker": "client", "text": "Бірақ маған бұрын бұлай айтылмаған..."},
+          {"timestamp": "2026-03-15T15:20:52+05:00", "speaker": "operator", "text": "Ол тарифте жазылған, оқу керек еді."},
+          {"timestamp": "2026-03-15T15:21:00+05:00", "speaker": "client", "text": "Жарайды, түсінікті."},
+          {"timestamp": "2026-03-15T15:21:02+05:00", "speaker": "system", "text": "Звонок завершён оператором"}
+        ]
+      },
+      {
+        "conversation_id": "b-en-chat-01",
+        "channel": "agent chat",
+        "language": "EN",
+        "audio_url": null,
+        "transcript": [
+          {"timestamp": "00:00", "speaker": "bot", "text": "Hi! I'm the Freedom Broker assistant. How can I help?"},
+          {"timestamp": "00:08", "speaker": "client", "text": "My limit order for AAPL didn't execute yesterday"},
+          {"timestamp": "00:09", "speaker": "bot", "text": "Connecting you to a specialist."},
+          {"timestamp": "00:35", "speaker": "operator", "text": "Hello, this is Mark from Freedom Broker support. Could you tell me your account number and the limit price you set?"},
+          {"timestamp": "00:52", "speaker": "client", "text": "Account 5523019, limit 168.50"},
+          {"timestamp": "04:30", "speaker": "operator", "text": "AAPL's lowest price yesterday was 169.12, so your limit of 168.50 was never reached and the order expired at market close. You can place a new order, or use a GTC order so it stays active until filled."},
+          {"timestamp": "04:50", "speaker": "client", "text": "Took a while... ok, how do I set GTC?"},
+          {"timestamp": "05:02", "speaker": "operator", "text": "Sorry for the wait. In the order form choose Duration: Good till cancelled."},
+          {"timestamp": "05:15", "speaker": "client", "text": "Got it"},
+          {"timestamp": "05:20", "speaker": "operator", "text": "Is there anything else I can help you with?"},
+          {"timestamp": "05:30", "speaker": "client", "text": "No thanks"},
+          {"timestamp": "05:33", "speaker": "operator", "text": "Have a great day!"}
+        ]
+      },
+      {
+        "conversation_id": "b-en-call-01",
+        "channel": "voice call",
+        "language": "EN",
+        "audio_url": "https://example.invalid/audio/b-en-call-01.mp3",
+        "transcript": [
+          {"timestamp": "2026-03-16T11:00:02+05:00", "speaker": "operator", "text": "Good afternoon, Freedom Broker, my name is Sara. How may I help you?"},
+          {"timestamp": "2026-03-16T11:00:08+05:00", "speaker": "client", "text": "Hi, I got dividends from Coca-Cola, how much tax will be withheld?"},
+          {"timestamp": "2026-03-16T11:00:15+05:00", "speaker": "operator", "text": "Are you a tax resident of Kazakhstan, and did you sign the W-8BEN form?"},
+          {"timestamp": "2026-03-16T11:00:22+05:00", "speaker": "client", "text": "Yes, resident, and I think I signed it when I opened the account."},
+          {"timestamp": "2026-03-16T11:00:30+05:00", "speaker": "operator", "text": "Then no tax is withheld at all, you get the full dividend."},
+          {"timestamp": "2026-03-16T11:00:35+05:00", "speaker": "client", "text": "Really? Nothing?"},
+          {"timestamp": "2026-03-16T11:00:38+05:00", "speaker": "operator", "text": "Yes, nothing at all."},
+          {"timestamp": "2026-03-16T11:00:42+05:00", "speaker": "client", "text": "Great, thanks."},
+          {"timestamp": "2026-03-16T11:00:45+05:00", "speaker": "operator", "text": "So to sum up: as a resident with a signed W-8BEN you receive the full dividend. Anything else I can help with?"},
+          {"timestamp": "2026-03-16T11:00:51+05:00", "speaker": "client", "text": "No, bye."},
+          {"timestamp": "2026-03-16T11:00:53+05:00", "speaker": "operator", "text": "Thank you for calling, goodbye!"}
+        ]
+      },
+      {
+        "conversation_id": "b-en-chat-02",
+        "channel": "agent chat",
+        "language": "EN",
+        "audio_url": null,
+        "transcript": [
+          {"timestamp": "00:00", "speaker": "bot", "text": "Hello! Please confirm your identity: enter the code sent by SMS."},
+          {"timestamp": "00:20", "speaker": "client", "text": "482910"},
+          {"timestamp": "00:21", "speaker": "system", "text": "Client verified via SMS code"},
+          {"timestamp": "00:30", "speaker": "client", "text": "where is my money?? you people stole my deposit"},
+          {"timestamp": "00:31", "speaker": "system", "text": "Operator joined"},
+          {"timestamp": "00:50", "speaker": "operator", "text": "Hello, I'm Lena from Freedom Broker. I understand how worrying this is, let me check right away. When did you make the deposit and how?"},
+          {"timestamp": "01:05", "speaker": "client", "text": "Yesterday by bank transfer, 1000 USD. Hurry up"},
+          {"timestamp": "01:20", "speaker": "operator", "text": "Thank you. I can see an incoming transfer of 1000 USD that arrived this morning; it will be credited to your brokerage account within 2 hours after the compliance check."},
+          {"timestamp": "01:30", "speaker": "client", "text": "whatever. bye"},
+          {"timestamp": "01:31", "speaker": "system", "text": "Client left the chat"}
+        ]
+      },
+      {
+        "conversation_id": "b-ru-call-02",
+        "channel": "voice call",
+        "language": "RU",
+        "audio_url": "https://example.invalid/audio/b-ru-call-02.mp3",
+        "transcript": [
+          {"timestamp": "2026-03-17T09:15:00+05:00", "speaker": "operator", "text": "Здравствуйте, Freedom Broker, Максим."},
+          {"timestamp": "2026-03-17T09:15:04+05:00", "speaker": "client", "text": "Здравствуйте, хочу подать заявку на IPO."},
+          {"timestamp": "2026-03-17T09:15:08+05:00", "speaker": "operator", "text": "Назовите, пожалуйста, номер договора и кодовое слово."},
+          {"timestamp": "2026-03-17T09:15:15+05:00", "speaker": "client", "text": "Договор 3390012, слово Каспий."},
+          {"timestamp": "2026-03-17T09:15:22+05:00", "speaker": "operator", "text": "Спасибо. На какое IPO и на какую сумму хотите подать заявку?"},
+          {"timestamp": "2026-03-17T09:15:30+05:00", "speaker": "client", "text": "На новое, которое в списке на этой неделе, на 1000 долларов."},
+          {"timestamp": "2026-03-17T09:15:36+05:00", "speaker": "operator", "text": "Подождите, пожалуйста, на линии, уточню условия."},
+          {"timestamp": "2026-03-17T09:16:40+05:00", "speaker": "operator", "text": "Спасибо за ожидание. Минимальная заявка 1000 долларов, приём до пятницы. Я оформлю заявку, вам придёт СМС-код — продиктуйте мне его."},
+          {"timestamp": "2026-03-17T09:16:55+05:00", "speaker": "client", "text": "Код 5571."},
+          {"timestamp": "2026-03-17T09:17:05+05:00", "speaker": "operator", "text": "Заявка оформлена. Итог: заявка на 1000 USD, результаты аллокации придут после закрытия книги заявок. Ещё вопросы есть?"},
+          {"timestamp": "2026-03-17T09:17:10+05:00", "speaker": "client", "text": "Нет."},
+          {"timestamp": "2026-03-17T09:17:12+05:00", "speaker": "operator", "text": "Всего доброго, до свидания!"}
+        ]
+      }
+    ]
+  }
+}

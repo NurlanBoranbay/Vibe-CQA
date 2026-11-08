@@ -1,0 +1,27 @@
+# docker compose up -d --build   →   UI: http://localhost:8030/ui/   ·   API docs: http://localhost:8030/docs
+services:
+  cqa:
+    build: .
+    image: vibe-cqa:latest
+    container_name: cqa
+    ports:
+      - "${CQA_PORT:-8030}:8030"
+    env_file:
+      - path: .env          # API keys (OPENROUTER_API_KEY, DEEPSEEK_API_KEY, …), ORGANIZER_API; optional
+        required: false
+    environment:
+      # Default model: Gemma 4 26B-A4B on a vLLM server. From inside the container the host is
+      # host.docker.internal (e.g. the SSH tunnel to kt-103 on the host's port 18887).
+      GEMMA_BASE_URL: ${GEMMA_BASE_URL:-http://host.docker.internal:18887/v1}
+      CQA_PROVIDER: compat:/models/gemma-4-26B-A4B-it@${GEMMA_BASE_URL:-http://host.docker.internal:18887/v1}
+      CQA_DB: /app/state/cqa.sqlite
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # Linux; Docker Desktop has it built in
+    volumes:
+      - cqa-state:/app/state     # SQLite: dialogs, evaluations, appeals, checklists, keys
+      - cqa-cache:/app/runs      # model response cache
+    restart: unless-stopped
+
+volumes:
+  cqa-state:
+  cqa-cache:
