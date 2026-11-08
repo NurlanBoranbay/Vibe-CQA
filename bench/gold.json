@@ -67,7 +67,7 @@
     "solution":       {"accept": [2, 1], "evidence": [5, 7]},
     "hold":           {"accept": ["no"], "evidence": [4, 5]},
     "politeness":     {"accept": [2, 1], "evidence": []},
-    "closing":        {"accept": [1], "evidence": [9, 11]},
+    "closing":        {"accept": [2, 1], "evidence": [9, 11]},
     "gross_error":    {"accept": ["yes"], "evidence": []}
   },
   "b-en-call-01": {

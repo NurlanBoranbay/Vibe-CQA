@@ -29,6 +29,7 @@ from cqa.data import load_checklist, load_dialogs, select  # noqa: E402
 from cqa.evaluate import evaluate  # noqa: E402
 from cqa.llm import Budget, Pending, load_env, make_provider  # noqa: E402
 from cqa.models import CriterionResult  # noqa: E402
+from cqa.prompt_presets import PRESETS  # noqa: E402
 
 
 def gold_total(cl, gold_d):
@@ -120,6 +121,7 @@ async def main():
     ap.add_argument("--gold", default=str(ROOT / "bench" / "gold.json"))
     ap.add_argument("--checklist", default=str(ROOT / "bench" / "checklist_default.json"))
     ap.add_argument("--label", default=None)
+    ap.add_argument("--prompt", default=None, help="system prompt preset: strict | soft (default: built-in strict rules)")
     ap.add_argument("--concurrency", type=int, default=4, help="dialogs in parallel")
     a = ap.parse_args()
 
@@ -137,7 +139,9 @@ async def main():
     async def run(d):
         async with sem:
             try:
-                return await evaluate(provider, cl, d, strategy=a.strategy, samples=a.samples)
+                rules = next(p["text"] for p in PRESETS if p["id"] == a.prompt) if a.prompt else None
+                return await evaluate(provider, cl, d, strategy=a.strategy, samples=a.samples, rules=rules,
+                                      prompt_label=f"{a.prompt} v1" if a.prompt else "")
             except Pending:
                 pending.append(d.conversation_id)
                 return None

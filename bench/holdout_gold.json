@@ -249,6 +249,7 @@
     },
     "closing": {
       "accept": [
+        2,
         1
       ],
       "evidence": [
