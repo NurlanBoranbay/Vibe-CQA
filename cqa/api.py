@@ -722,11 +722,15 @@ def list_evaluations(checklist_id: str = "official", all: bool = False):
 
 
 @app.get("/export")
-def export_results(checklist_id: str = "official", team: str = "VibeTeam"):
-    """Organizers' submission format (results.json) from the FINAL results, reviewer decisions included."""
+def export_results(checklist_id: str = "official", team: str = "VibeTeam", dataset: Optional[str] = None):
+    """Organizers' submission format (results.json) from the FINAL results, reviewer decisions included.
+    ?dataset=<group_id> limits it to one imported set (e.g. DEV or the control set); a dialog of that set
+    with no finished evaluation goes in as status "error" so nothing is silently dropped."""
     cl = _checklist(checklist_id)
+    want = [d["conversation_id"] for d in store.dialogs(dataset)] if dataset else None
+    evs = [ev for ev in store.evaluations_latest(checklist_id) if want is None or ev["conversation_id"] in want]
     recs, ids = [], []
-    for ev in store.evaluations_latest(checklist_id):
+    for ev in evs:
         ecl = _checklist(checklist_id, ev["checklist_version"])
         e = Evaluation(conversation_id=ev["conversation_id"], checklist_id=checklist_id,
                        checklist_version=ev["checklist_version"], strategy=ev["original"].get("strategy", ""),
@@ -735,14 +739,19 @@ def export_results(checklist_id: str = "official", team: str = "VibeTeam"):
                        score=ev["final"]["score"])
         recs.append(export.record(ecl, e))
         ids.append(ev["conversation_id"])
+    for cid in want or []:
+        if cid not in ids:
+            recs.append({"conversation_id": cid, "status": "error", "criteria": [], "score": None,
+                         "error": "Оценка не получена"})
+            ids.append(cid)
     # model names actually used; a vLLM path (/models/…) means our own server → "local"
-    used = sorted({str(ev["original"].get("model") or "") for ev in store.evaluations_latest(checklist_id)} - {""})
+    used = sorted({str(ev["original"].get("model") or "") for ev in evs} - {""})
     clean = lambda m: re.sub(r"\[.*?\]$", "", m).removeprefix("/models/")
     local = [m.startswith("/models/") for m in used]
     mode = "local" if local and all(local) else "hybrid" if any(local) else "external_api"
     doc = export.document(recs, team=team, model_name=", ".join(dict.fromkeys(clean(m) for m in used)) or PROVIDER_SPEC,
                           mode=mode)
-    return {**doc, "_check": export.check(doc, cl, ids)}
+    return {**doc, "_check": export.check(doc, cl, want if want is not None else ids)}
 
 
 @app.get("/evaluations/{cid}")
