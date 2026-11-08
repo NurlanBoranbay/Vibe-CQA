@@ -128,19 +128,33 @@
     if (e.key === 'Enter' && e.target.matches && e.target.matches('tr[data-act="ev-open"]')) CQA.go(e.target.dataset.href);
   });
 
-  CQA.actions['ev-export'] = () => {
+  CQA.actions['ev-export'] = async () => {
+    // one results.json per imported set (DEV → results/dev, control set → results/prod); only sets with evaluations
+    const dialogs = await api('/dialogs');
+    const sets = Object.entries(dialogs.reduce((m, d) => {
+      const k = d.dataset || 'DEV';
+      m[k] = m[k] || { n: 0, done: 0 };
+      m[k].n += 1; if (d.total != null) m[k].done += 1;
+      return m;
+    }, {})).filter(([, v]) => v.done).sort((a, b) => (a[0] === 'DEV') - (b[0] === 'DEV') || a[0].localeCompare(b[0]));
+    if (!sets.length) { CQA.toast('Нет оценённых диалогов', 'err'); return; }
+    const folder = (k) => (k === 'DEV' ? 'results/dev' : 'results/prod');
     CQA.modal({
       title: 'Экспорт results.json',
-      body: html`        <div class="field"><label for="exp-team">Название команды</label><input id="exp-team" name="team" class="input" value="${localStorage.getItem('cqa.team') || 'VibeTeam'}" required autocomplete="off"></div>`,
+      body: html`<div class="field"><span class="lbl">Набор</span>
+          <div class="seg" role="radiogroup" aria-label="Набор">${sets.map(([k, v], i) => html`<label class="seg-opt"><input type="radio" name="dataset" value="${k}" ${i === 0 ? raw('checked') : ''}><span>${k} · ${v.done}${v.done < v.n ? ` из ${v.n}` : ''}</span></label>`)}</div>
+          <span class="field-hint">Один файл — один набор: DEV → ${folder('DEV')}/results.json, контрольный → results/prod/results.json</span></div>
+        <div class="field"><label for="exp-team">Название команды</label><input id="exp-team" name="team" class="input" value="${localStorage.getItem('cqa.team') || 'VibeTeam'}" required autocomplete="off"></div>`,
       foot: html`<button class="btn" value="cancel">Отмена</button><button class="btn primary" value="ok">${icon('download', 16)}Скачать</button>`,
       async onSubmit(fd) {
         const team = fd.get('team').trim();
+        const dataset = fd.get('dataset') || sets[0][0];
         try { localStorage.setItem('cqa.team', team); } catch (e) {}
-        const doc = await api(`/export?checklist_id=${encodeURIComponent(S.checklist)}&team=${encodeURIComponent(team)}`);
+        const doc = await api(`/export?checklist_id=${encodeURIComponent(S.checklist)}&dataset=${encodeURIComponent(dataset)}&team=${encodeURIComponent(team)}`);
         const problems = doc._check || [];
         delete doc._check;
         CQA.downloadJson(doc, 'results.json');
-        CQA.toast(problems.length ? `Скачано, но есть замечания: ${problems.slice(0, 3).join('; ')}` : `Скачано: ${doc.results.length} записей, проверка формата пройдена`, problems.length ? 'err' : 'ok');
+        CQA.toast(problems.length ? `Скачано, но есть замечания: ${problems.slice(0, 3).join('; ')}` : `Скачано: ${dataset}, ${doc.results.length} записей, проверка формата пройдена`, problems.length ? 'err' : 'ok');
       },
     });
   };
